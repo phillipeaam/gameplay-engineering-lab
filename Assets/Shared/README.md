@@ -9,15 +9,15 @@ Group shared content by its source or domain, then by asset type:
 ```text
 Assets/Shared/
 ├── README.md
-├── RPG Tiny Hero Duo/
-│   ├── Material/
+├── Vendor Asset Name/
+│   ├── Materials/
 │   └── Prefabs/
 └── Common/
-    ├── Material/
+    ├── Materials/
     └── Prefabs/
 ```
 
-Use consistent type folders within each domain, such as `Material`, `Prefabs`, `Animations`, and `Textures`.
+Use consistent type folders within each domain, such as `Materials`, `Prefabs`, `Animations`, and `Textures`.
 
 ## Guidelines
 
@@ -25,7 +25,7 @@ Use consistent type folders within each domain, such as `Material`, `Prefabs`, `
 - Add content here only after it is reused or deliberately designed for reuse.
 - Store modified third-party variants here; never edit files under `Assets/ThirdParty/` directly.
 - Reference original vendor textures, meshes, or animations by GUID when they do not require modification.
-- Keep source-specific adaptations under a folder named after the source asset; use `Common/` only for project-wide content with no vendor ownership.
+- Keep source-specific adaptations under a folder whose name matches the corresponding root in `Assets/ThirdParty/`; use `Common/` only for project-wide content with no vendor ownership.
 
 ## Third-Party Adaptations
 
