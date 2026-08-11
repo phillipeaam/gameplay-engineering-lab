@@ -32,4 +32,5 @@ When adding an asset:
 
 | Asset | Publisher | Source | License |
 | --- | --- | --- | --- |
-| RPG Tiny Hero Duo PBR Polyart | DM Dungeon Mason | [Unity Asset Store](https://assetstore.unity.com/packages/3d/characters/humanoids/rpg-tiny-hero-duo-pbr-polyart-225148) | [Standard Unity Asset Store EULA](https://unity.com/legal/as-terms), Extension Asset |
+| RPG Tiny Hero Duo PBR Polyart | Dungeon Mason | [Unity Asset Store](https://assetstore.unity.com/packages/3d/characters/humanoids/rpg-tiny-hero-duo-pbr-polyart-225148) | [Standard Unity Asset Store EULA](https://unity.com/legal/as-terms), Extension Asset |
+| RPG Monster Partners PBR Polyart | Dungeon Mason | [Unity Asset Store](https://assetstore.unity.com/packages/p/rpg-monster-partners-pbr-polyart-168251) | [Standard Unity Asset Store EULA](https://unity.com/legal/as-terms), Extension Asset |
