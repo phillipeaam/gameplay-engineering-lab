@@ -12,6 +12,9 @@
 *.shader text eol=lf
 *.shadergraph text eol=lf
 
+# Unity-generated editor layouts should not affect GitHub language statistics.
+*.wlt text eol=lf linguist-generated=true
+
 # Large source and imported assets.
 *.psd filter=lfs diff=lfs merge=lfs -text
 *.psb filter=lfs diff=lfs merge=lfs -text
