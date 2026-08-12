@@ -176,11 +176,10 @@ The feature uses a feature-first structure with layers inside this folder:
 ```text
 Gameplay/
 └── TheCorruptedSanctuary/
-    ├── Domain/
-    │   └── Model/          # Gameplay state and rules
-    ├── Application/
-    │   └── Execution/      # Command queues and turn orchestration
-    ├── Presentation/       # Unity actors, camera, animation, and feedback
+    ├── README.md
+    ├── Domain/             # Gameplay state and rules
+    ├── Application/       # Command queues and turn orchestration
+    ├── Presentation/      # Unity actors, camera, animation, and feedback
     └── Composition/        # Composition root connecting the layers
 ```
 
