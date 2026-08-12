@@ -1,4 +1,4 @@
-# The Last Sequence
+# The Corrupted Sanctuary
 
 Gameplay specification for the Command Pattern vertical slice.
 
@@ -15,6 +15,7 @@ The player reads a guardian's three-beat attack pattern, queues three commands, 
 - [UI](#ui)
 - [Visual direction](#visual-direction)
 - [Replay and technical boundaries](#replay-and-technical-boundaries)
+- [Architecture](#architecture)
 
 ## Experience
 
@@ -167,3 +168,35 @@ An inviting fantasy sanctuary becomes dangerous at its center: stylized forest f
 The seed selects authored anchor sockets, blocker sockets, patterns, and cosmetic accents. Never repeat the same complete pattern twice in a row. Always preserve a valid route and reachable anchor.
 
 Gameplay code owns state, simulation, commands, outcomes, and cinematic transitions. Cinemachine/Timeline own shot sequencing, blends, and authored presentation. Project-owned material or prefab adaptations belong in `Assets/Shared`; vendor source remains under `Assets/ThirdParty`.
+
+## Architecture
+
+The feature uses a feature-first structure with layers inside this folder:
+
+```text
+Gameplay/
+└── TheCorruptedSanctuary/
+    ├── Domain/
+    │   └── Model/          # Gameplay state and rules
+    ├── Application/
+    │   └── Execution/      # Command queues and turn orchestration
+    ├── Presentation/       # Unity actors, camera, animation, and feedback
+    └── Composition/        # Composition root connecting the layers
+```
+
+### Layer responsibilities
+
+- **Domain:** owns state, patterns, simulation, and rules. It does not depend on `MonoBehaviour`, Animator, or Cinemachine.
+- **Application:** coordinates commands and turn execution through domain contracts.
+- **Presentation:** translates gameplay results into transforms, animations, camera work, UI, and effects.
+- **Composition:** creates Unity objects and wires Domain, Application, and Presentation together.
+
+### SOLID intent
+
+- **Single Responsibility:** simulation, pattern selection, command execution, and presentation have separate reasons to change.
+- **Open/Closed:** new commands or attacks can be added without rewriting the entire encounter flow.
+- **Liskov Substitution:** command implementations follow the same execution contract.
+- **Interface Segregation:** contracts expose focused capabilities instead of unrelated Unity behavior.
+- **Dependency Inversion:** gameplay rules depend on contracts and data; Unity-specific implementations stay at the edges.
+
+This is a lightweight layered architecture, not a full MVC, MVP, or MVVM implementation. It demonstrates clear boundaries without adding abstractions that this vertical slice does not need.
