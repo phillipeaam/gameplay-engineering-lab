@@ -13,7 +13,7 @@ flowchart TD
     Character --> Presentation[Presentation]
 
     Locomotion --> Move[Idle / Run / Sprint / Jump]
-    Actions --> FullBody[Fall / GetUp / Dodge / Stun]
+    Actions --> FullBody[Fall / Get Up / Stun]
     Actions --> UpperBody[Attack / Defend]
     Conditions --> Persistent[Poisoned / Bleeding / Burning]
     Presentation --> Feedback[Victory / LevelUp / Emotes]
@@ -23,11 +23,11 @@ flowchart TD
 
 | Layer | Responsibility | Blend | Mask |
 | --- | --- | --- | --- |
-| `Locomotion` | Idle, run, sprint, jump and air movement | Base | Full body |
-| `Full Body Actions` | Fall, FallStay, GetUp, dodge, stun, hit reaction and death | Override | Full body |
-| `Upper Body Actions` | Attack, defend, cast and interact | Override | Torso, arms and head |
-| `Conditions` | Dizzy, poisoned, bleeding, burning and other persistent effects | Override or additive | Effect-specific |
-| `Presentation` | Victory, level up and emotes | Override | Full body or upper body |
+| `Locomotion` | Idle, Run, Sprint, Jump and Air Movement | Base | Full body |
+| `Full Body Actions` | Fall, Fall Stay, Get Up, Stun, Hit Reaction and Death | Override | Full body |
+| `Upper Body Actions` | Attack, Defend, Cast and Interact | Override | Torso, arms and head |
+| `Conditions` | Dizzy, Poisoned, Bleeding, Burning and other persistent effects | Override or additive | Effect-specific |
+| `Presentation` | Victory, Level Up and Emotes | Override | Full body or upper body |
 
 The base locomotion layer normally stays at weight `1.0`. Action, condition and
 presentation layers are enabled only while they have an active animation.
@@ -66,13 +66,13 @@ character rig.
 
 ```mermaid
 stateDiagram-v2
-    Locomotion --> Falling: Fall requested
-    Falling --> FallStay: Animation finished
-    FallStay --> GetUp: Recovery requested
-    GetUp --> Locomotion: Animation finished
+    Locomotion --> Falling: Fall Requested
+    Falling --> FallStay[Fall Stay]: Animation Finished
+    FallStay --> GetUp[Get Up]: Recovery Requested
+    GetUp --> Locomotion: Animation Finished
 ```
 
-`Fall`, `FallStay` and `GetUp` are phases of one fall action, not three
+`Fall`, `Fall Stay` and `Get Up` are phases of one fall action, not three
 independent actions competing for control of the character.
 
 Typical control rules while falling:
@@ -83,7 +83,7 @@ CanAttack = false
 CanDefend = false
 ```
 
-The same category can contain dodge, roll, stun, hit reaction and death. Each
+The same category can contain stun, hit reaction and death. Each
 action should have a clear animation contract and a corresponding gameplay rule
 that decides which actions are currently allowed.
 
@@ -185,7 +185,7 @@ Presentation
     Represents feedback, celebration and communication.
 
 Gameplay rules
-    Decide whether movement, attack, dodge or defense are currently allowed;
+    Decide whether movement, attack or defense are currently allowed;
     Animator layers only represent the resulting behavior.
 ```
 
