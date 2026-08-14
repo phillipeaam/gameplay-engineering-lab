@@ -2,7 +2,7 @@ using System;
 using Shared.RPG_Tiny_Hero_Duo.Scripts.Locomotion.Animation;
 using UnityEngine;
 
-namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Locomotion.Movement
+namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Locomotion.Gameplay
 {
     public sealed class LocomotionController
     {

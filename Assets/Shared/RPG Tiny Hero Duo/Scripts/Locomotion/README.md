@@ -10,7 +10,7 @@ locomotion layer.
 Locomotion/
 ├── Animation/
 ├── Input/
-└── Movement/
+└── Gameplay/
 ```
 
 ### Animation
@@ -38,7 +38,7 @@ Jump performed          → JumpRequested
 It does not know gameplay rules or the Animator. Call `Enable()` and
 `Disable()` with the owning feature's lifecycle.
 
-### Movement
+### Gameplay
 
 `LocomotionController` coordinates the received intentions. It forwards
 movement and grounded state to the Animator and asks `IJumpHandler` whether a
