@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Locomotion.Input
+namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Input
 {
     public sealed class LocomotionInputEvents
     {

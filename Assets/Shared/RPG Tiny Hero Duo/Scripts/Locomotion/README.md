@@ -1,17 +1,18 @@
 # Locomotion
 
-Locomotion connects player input, movement rules, and the Animator. It does not
-define the character's visual states; it sends the relevant values to the
-locomotion layer.
+Locomotion coordinates movement state, jump rules, and the Animator. It does
+not define how movement requests are produced; it receives state changes and
+translates their results into the locomotion animation layer.
 
 ## Structure
 
 ```text
 Locomotion/
 ├── Animation/
-├── Input/
 └── Gameplay/
 ```
+
+The layer is compiled by `RPGTinyHeroDuo.Locomotion.asmdef`.
 
 ### Animation
 
@@ -26,34 +27,20 @@ RequestJump()           → JumpRequest
 `LocomotionAnimatorAdapter` implements this contract for Unity's `Animator` and
 owns the cached parameter hashes.
 
-### Input
-
-`LocomotionInputEvents` translates Unity Input System callbacks into intentions:
-
-```text
-Move performed/canceled → MovementChanged(Vector2)
-Jump performed          → JumpRequested
-```
-
-It does not know gameplay rules or the Animator. Call `Enable()` and
-`Disable()` with the owning feature's lifecycle.
-
 ### Gameplay
 
-`LocomotionController` coordinates the received intentions. It forwards
+`LocomotionController` coordinates movement state changes. It forwards
 movement and grounded state to the Animator and asks `IJumpHandler` whether a
 jump is allowed before requesting its animation.
 
 `IJumpHandler` is the gameplay boundary for jump rules such as grounded checks,
 air jumps, stamina, and control restrictions.
 
-## Data flow
+## Module flow
 
 ```text
-Input System
+Movement state changes
     ↓
-LocomotionInputEvents
-    ↓ events
 LocomotionController
     ├── IJumpHandler      → validates jump rules
     └── ILocomotionAnimator → updates visual parameters
