@@ -1,4 +1,5 @@
 using System;
+using Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Configuration;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,12 +13,15 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Input
         public event Action<Vector2> MovementChanged;
         public event Action JumpRequested;
 
-        public LocomotionInputEvents(
-            InputAction moveAction,
-            InputAction jumpAction)
+        public LocomotionInputEvents(ILocomotionInput input)
         {
-            _moveAction = moveAction ?? throw new ArgumentNullException(nameof(moveAction));
-            _jumpAction = jumpAction ?? throw new ArgumentNullException(nameof(jumpAction));
+            if (input == null)
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
+
+            _moveAction = input.Move ?? throw new ArgumentNullException(nameof(input.Move));
+            _jumpAction = input.Jump ?? throw new ArgumentNullException(nameof(input.Jump));
         }
 
         public void Enable()
