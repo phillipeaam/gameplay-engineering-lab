@@ -1,22 +1,34 @@
 # Locomotion
 
-Locomotion coordinates movement state, jump rules, and the Animator. It does
-not define how movement requests are produced; it receives state changes and
-translates their results into the locomotion animation layer.
+## Purpose
+
+Locomotion exposes the animation contract for movement state. It maps supplied
+movement, grounded, and jump values to Unity Animator parameters.
+
+It does not define movement rules or how state changes are produced.
 
 ## Structure
 
 ```text
 Locomotion/
-├── Animation/
-└── Gameplay/
+├── ILocomotionAnimator.cs
+├── LocomotionAnimatorAdapter.cs
+├── RPGTinyHeroDuo.Locomotion.asmdef
+└── README.md
 ```
 
-The layer is compiled by `RPGTinyHeroDuo.Locomotion.asmdef`.
+## Animator parameters
 
-### Animation
+```text
+MoveX       : Float
+MoveY       : Float
+IsGrounded  : Bool
+JumpRequest : Trigger
+```
 
-`ILocomotionAnimator` defines the visual contract:
+## Contract
+
+`ILocomotionAnimator` exposes the visual operations:
 
 ```text
 ApplyMovement(Vector2)  → MoveX and MoveY
@@ -24,27 +36,14 @@ SetGrounded(bool)       → IsGrounded
 RequestJump()           → JumpRequest
 ```
 
-`LocomotionAnimatorAdapter` implements this contract for Unity's `Animator` and
+`LocomotionAnimatorAdapter` implements the contract for Unity's `Animator` and
 owns the cached parameter hashes.
 
-### Gameplay
+## Ownership
 
-`LocomotionController` coordinates movement state changes. It forwards
-movement and grounded state to the Animator and asks `IJumpHandler` whether a
-jump is allowed before requesting its animation.
+The adapter only maps supplied state to Animator parameters. Movement, grounding,
+jump, and input rules belong to the feature that consumes this module.
 
-`IJumpHandler` is the gameplay boundary for jump rules such as grounded checks,
-air jumps, stamina, and control restrictions.
+## Assembly
 
-## Module flow
-
-```text
-Movement state changes
-    ↓
-LocomotionController
-    ├── IJumpHandler      → validates jump rules
-    └── ILocomotionAnimator → updates visual parameters
-```
-
-The Animator adapter only represents the result. It does not decide whether a
-character can move or jump.
+The module is compiled by `RPGTinyHeroDuo.Locomotion.asmdef`.

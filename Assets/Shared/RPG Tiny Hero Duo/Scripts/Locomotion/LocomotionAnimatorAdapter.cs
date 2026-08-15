@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Locomotion.Animation
+namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Locomotion
 {
     public sealed class LocomotionAnimatorAdapter : ILocomotionAnimator
     {

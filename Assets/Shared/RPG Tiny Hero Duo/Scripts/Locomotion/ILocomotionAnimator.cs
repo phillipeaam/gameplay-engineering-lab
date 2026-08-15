@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Locomotion.Animation
+namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Locomotion
 {
     public interface ILocomotionAnimator
     {
