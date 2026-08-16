@@ -1,4 +1,5 @@
 using System;
+using Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Extensions;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -36,9 +37,18 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Locomotion
         [SerializeField] private float _landingMovementMultiplier = 0.2f;
 
 
-        public InputAction Move => _move.action;
-        public InputAction Look => _look.action;
-        public InputAction Jump => _jump.action;
+        public InputAction Move => _move.RequireAction(
+            nameof(_move),
+            nameof(LocomotionInputReferences));
+
+        public InputAction Look => _look.RequireAction(
+            nameof(_look),
+            nameof(LocomotionInputReferences));
+
+        public InputAction Jump => _jump.RequireAction(
+            nameof(_jump),
+            nameof(LocomotionInputReferences));
+
         public float MovementSpeed => _movementSpeed;
         public float RotationSpeed => _rotationSpeed;
         public float JumpHeight => _jumpHeight;
