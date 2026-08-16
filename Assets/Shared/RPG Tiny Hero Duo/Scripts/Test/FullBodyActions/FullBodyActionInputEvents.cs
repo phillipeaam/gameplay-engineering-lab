@@ -33,7 +33,11 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.FullBodyActions
 
         public void Enable()
         {
-            if (_isEnabled) return;
+            if (_isEnabled)
+            {
+                return;
+            }
+
             _fallAction.performed += OnFallPerformed;
             _stunAction.performed += OnStunPerformed;
             _hitReactionAction.performed += OnHitReactionPerformed;
@@ -50,7 +54,11 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.FullBodyActions
 
         public void Disable()
         {
-            if (!_isEnabled) return;
+            if (!_isEnabled)
+            {
+                return;
+            }
+
             _fallAction.performed -= OnFallPerformed;
             _stunAction.performed -= OnStunPerformed;
             _hitReactionAction.performed -= OnHitReactionPerformed;

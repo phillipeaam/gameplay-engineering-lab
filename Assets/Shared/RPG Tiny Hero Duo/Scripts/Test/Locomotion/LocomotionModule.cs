@@ -46,7 +46,11 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Locomotion
 
         public void Enable()
         {
-            if (_isEnabled) return;
+            if (_isEnabled)
+            {
+                return;
+            }
+
             _input.MovementChanged += OnMovementChanged;
             _input.JumpRequested += OnJumpRequested;
             _input.LookChanged += OnLookChanged;
@@ -56,7 +60,11 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Locomotion
 
         public void Disable()
         {
-            if (!_isEnabled) return;
+            if (!_isEnabled)
+            {
+                return;
+            }
+
             _input.MovementChanged -= OnMovementChanged;
             _input.JumpRequested -= OnJumpRequested;
             _input.LookChanged -= OnLookChanged;

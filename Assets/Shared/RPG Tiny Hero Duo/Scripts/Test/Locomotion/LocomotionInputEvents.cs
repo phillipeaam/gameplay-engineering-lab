@@ -31,7 +31,11 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Locomotion
 
         public void Enable()
         {
-            if (_isEnabled) return;
+            if (_isEnabled)
+            {
+                return;
+            }
+
             _moveAction.performed += OnMovePerformed;
             _moveAction.canceled += OnMoveCanceled;
             _jumpAction.performed += OnJumpPerformed;
@@ -46,7 +50,11 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Locomotion
 
         public void Disable()
         {
-            if (!_isEnabled) return;
+            if (!_isEnabled)
+            {
+                return;
+            }
+
             _moveAction.performed -= OnMovePerformed;
             _moveAction.canceled -= OnMoveCanceled;
             _jumpAction.performed -= OnJumpPerformed;

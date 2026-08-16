@@ -24,7 +24,11 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.FullBodyActions
 
         public void Enable()
         {
-            if (_isEnabled) return;
+            if (_isEnabled)
+            {
+                return;
+            }
+
             _inputEvents.ActionRequested += OnActionRequested;
             _inputEvents.LoopReleased += OnLoopReleased;
             _inputEvents.Enable();
@@ -33,7 +37,11 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.FullBodyActions
 
         public void Disable()
         {
-            if (!_isEnabled) return;
+            if (!_isEnabled)
+            {
+                return;
+            }
+
             _inputEvents.ActionRequested -= OnActionRequested;
             _inputEvents.LoopReleased -= OnLoopReleased;
             _inputEvents.Disable();
