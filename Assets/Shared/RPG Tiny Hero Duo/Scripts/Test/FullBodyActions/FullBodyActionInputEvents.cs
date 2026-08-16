@@ -24,11 +24,11 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.FullBodyActions
                 throw new ArgumentNullException(nameof(input));
             }
 
-            _fallAction = input.Fall ?? throw new ArgumentNullException(nameof(input.Fall));
-            _stunAction = input.Stun ?? throw new ArgumentNullException(nameof(input.Stun));
-            _hitReactionAction = input.HitReaction ?? throw new ArgumentNullException(nameof(input.HitReaction));
-            _deathAction = input.Death ?? throw new ArgumentNullException(nameof(input.Death));
-            _loopAction = input.Loop ?? throw new ArgumentNullException(nameof(input.Loop));
+            _fallAction = input.Fall;
+            _stunAction = input.Stun;
+            _hitReactionAction = input.HitReaction;
+            _deathAction = input.Death;
+            _loopAction = input.Loop;
         }
 
         public void Enable()

@@ -24,9 +24,9 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Locomotion
                 throw new ArgumentNullException(nameof(input));
             }
 
-            _moveAction = input.Move ?? throw new ArgumentNullException(nameof(input.Move));
-            _jumpAction = input.Jump ?? throw new ArgumentNullException(nameof(input.Jump));
-            _lookAction = input.Look ?? throw new ArgumentNullException(nameof(input.Look));
+            _moveAction = input.Move;
+            _jumpAction = input.Jump;
+            _lookAction = input.Look;
         }
 
         public void Enable()
