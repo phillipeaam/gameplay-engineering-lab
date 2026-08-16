@@ -6,5 +6,7 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Locomotion
         float RotationSpeed { get; }
         float JumpHeight { get; }
         bool CanDoubleJump { get; }
+        float LandingDuration { get; }
+        float LandingMovementMultiplier { get; }
     }
 }

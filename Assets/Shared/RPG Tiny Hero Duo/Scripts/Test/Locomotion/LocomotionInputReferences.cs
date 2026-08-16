@@ -7,13 +7,34 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Locomotion
     [Serializable]
     public sealed class LocomotionInputReferences : ILocomotionInput, ILocomotionSettings
     {
+        [Tooltip("Input action used for horizontal and vertical movement.")]
         [SerializeField] private InputActionReference _move;
+
+        [Tooltip("Input action used to rotate the character horizontally.")]
         [SerializeField] private InputActionReference _look;
+
+        [Tooltip("Input action used to request a jump.")]
         [SerializeField] private InputActionReference _jump;
-        [SerializeField] private float _movementSpeed = 3f;
-        [SerializeField] private float _rotationSpeed = 180f;
+
+        [Tooltip("Maximum horizontal movement speed in units per second.")]
+        [SerializeField] private float _movementSpeed = 5f;
+
+        [Tooltip("Character rotation speed in degrees per second.")]
+        [SerializeField] private float _rotationSpeed = 250f;
+
+        [Tooltip("Maximum vertical height reached by a jump, in world units.")]
         [SerializeField] private float _jumpHeight = 1.5f;
+
+        [Tooltip("Allows the character to perform one additional jump while airborne.")]
         [SerializeField] private bool _canDoubleJump = true;
+
+        [Tooltip("How long jumping remains locked after landing, in seconds.")]
+        [SerializeField] private float _landingDuration = 0.4f;
+
+        [Range(0f, 1f)]
+        [Tooltip("Movement speed multiplier immediately after landing. 0 means no movement and 1 means full speed.")]
+        [SerializeField] private float _landingMovementMultiplier = 0.2f;
+
 
         public InputAction Move => _move.action;
         public InputAction Look => _look.action;
@@ -22,5 +43,7 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Locomotion
         public float RotationSpeed => _rotationSpeed;
         public float JumpHeight => _jumpHeight;
         public bool CanDoubleJump => _canDoubleJump;
+        public float LandingDuration => _landingDuration;
+        public float LandingMovementMultiplier => _landingMovementMultiplier;
     }
 }

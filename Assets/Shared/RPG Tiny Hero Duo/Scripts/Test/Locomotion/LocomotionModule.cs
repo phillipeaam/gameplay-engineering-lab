@@ -19,6 +19,7 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Locomotion
         private float _verticalVelocity;
         private bool _hasDoubleJumpAvailable;
         private bool _jumpRequested;
+        private float _landingTimeRemaining;
         private bool _isEnabled;
         private bool? _previousGroundedState;
 
@@ -81,11 +82,20 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Locomotion
 
         public void Tick(float deltaTime)
         {
+            UpdateLandingTimer(deltaTime);
             UpdateVerticalVelocity(deltaTime);
             CollisionFlags collisionFlags = MoveCharacter(deltaTime);
             UpdateGroundedState(collisionFlags);
             ProcessJumpRequest();
             ApplyRotation(deltaTime);
+        }
+        
+        private void UpdateLandingTimer(float deltaTime)
+        {
+            if (_landingTimeRemaining > 0f)
+            {
+                _landingTimeRemaining = Mathf.Max(0f, _landingTimeRemaining - deltaTime);
+            }
         }
 
         private void UpdateVerticalVelocity(float deltaTime)
@@ -112,7 +122,8 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Locomotion
         {
             // Input is expressed relative to the character: x is left/right and z is forward/backward.
             var localInputDirection = new Vector3(_movementInput.x, 0f, _movementInput.y);
-            var localMovementVelocity = localInputDirection * _settings.MovementSpeed;
+            float movementMultiplier = CalculateLandingMovementMultiplier();
+            var localMovementVelocity = localInputDirection * (_settings.MovementSpeed * movementMultiplier);
 
             // Convert horizontal movement into world space so forward follows the character's rotation.
             var worldMovementVelocity = _characterController.transform.TransformDirection(localMovementVelocity);
@@ -121,6 +132,21 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Locomotion
             worldMovementVelocity.y = _verticalVelocity;
 
             return _characterController.Move(worldMovementVelocity * deltaTime);
+        }
+
+        private float CalculateLandingMovementMultiplier()
+        {
+            if (_landingTimeRemaining <= 0f || _settings.LandingDuration <= 0f)
+            {
+                return 1f;
+            }
+
+            float recoveryProgress = 1f - _landingTimeRemaining / _settings.LandingDuration;
+
+            return Mathf.Lerp(
+                _settings.LandingMovementMultiplier,
+                1f,
+                Mathf.Clamp01(recoveryProgress));
         }
 
         private void UpdateGroundedState(CollisionFlags collisionFlags)
@@ -132,6 +158,12 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Locomotion
             // The first call must initialize the cached state. After that, we only need to
             // notify the animator when the character changes between grounded and airborne.
             bool groundedStateChanged = !_previousGroundedState.HasValue || grounded != _previousGroundedState.Value;
+
+            bool hasLanded = grounded && _previousGroundedState == false;
+            if (hasLanded)
+            {
+                _landingTimeRemaining = Mathf.Max(0f, _settings.LandingDuration);
+            }
 
             // When grounded, refresh the double-jump state after landing. The availability
             // check also detects changes to CanDoubleJump made during runtime.
@@ -157,6 +189,11 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Locomotion
             }
 
             _jumpRequested = false;
+
+            if (_landingTimeRemaining > 0f)
+            {
+                return;
+            }
 
             if (_previousGroundedState == true)
             {
