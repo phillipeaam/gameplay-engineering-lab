@@ -1,6 +1,6 @@
 using UnityEngine.InputSystem;
 
-namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Configuration
+namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.FullBodyActions
 {
     public interface IFullBodyActionsInput
     {
@@ -8,5 +8,6 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Configuration
         InputAction Stun { get; }
         InputAction HitReaction { get; }
         InputAction Death { get; }
+        InputAction Loop { get; }
     }
 }

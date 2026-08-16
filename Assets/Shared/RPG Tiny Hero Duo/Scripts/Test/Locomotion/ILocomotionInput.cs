@@ -1,6 +1,6 @@
 using UnityEngine.InputSystem;
 
-namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Configuration
+namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Locomotion
 {
     public interface ILocomotionInput
     {
