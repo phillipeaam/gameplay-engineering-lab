@@ -18,9 +18,10 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Locomotion
         private Vector2 _lookInput;
         private float _verticalVelocity;
         private bool _hasDoubleJumpAvailable;
+        private bool _jumpRequested;
         private bool _isEnabled;
         private bool? _previousGroundedState;
-        
+
         public LocomotionModule(
             CharacterController characterController,
             ILocomotionAnimator animator,
@@ -34,11 +35,11 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Locomotion
             {
                 throw new ArgumentNullException(nameof(input));
             }
-            
+
             _settings = settings ?? throw new ArgumentNullException(nameof(settings));
 
             _hasDoubleJumpAvailable = settings.CanDoubleJump;
-            
+
             _input = new LocomotionInputEvents(input);
         }
 
@@ -67,39 +68,10 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Locomotion
             _movementInput = movement;
             _animator.ApplyMovement(movement);
         }
-        
+
         private void OnJumpRequested()
         {
-            if (_characterController.isGrounded)
-            {
-                ApplyJumpVelocity();
-                _animator.RequestJump();
-                return;
-            }
-
-            if (_settings.CanDoubleJump && _hasDoubleJumpAvailable)
-            {
-                _hasDoubleJumpAvailable = false;
-                ApplyJumpVelocity();
-                _animator.RequestJump();
-            }
-        }
-        
-        /// <summary>
-        /// Calculates the upward speed needed for the character to reach the configured jump height.
-        /// The character starts with this vertical speed, then gravity gradually slows the ascent
-        /// until the character reaches the highest point of the jump.
-        ///
-        /// The calculation comes from the constant-acceleration motion equation:
-        /// finalSpeed² = initialSpeed² + 2 × acceleration × distance.
-        /// At the jump apex, finalSpeed is zero, so the equation becomes:
-        /// initialSpeed = squareRoot(jumpHeight × -2 × gravity).
-        /// </summary>
-        private void ApplyJumpVelocity()
-        {
-            // Physics.gravity.y is negative, so multiplying it by -2 produces a positive value
-            // that can be safely passed to the square root calculation.
-            _verticalVelocity = Mathf.Sqrt(_settings.JumpHeight * -2f * Physics.gravity.y);
+            _jumpRequested = true;
         }
 
         private void OnLookChanged(Vector2 look)
@@ -112,6 +84,7 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Locomotion
             UpdateVerticalVelocity(deltaTime);
             CollisionFlags collisionFlags = MoveCharacter(deltaTime);
             UpdateGroundedState(collisionFlags);
+            ProcessJumpRequest();
             ApplyRotation(deltaTime);
         }
 
@@ -174,6 +147,47 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Locomotion
                 _animator.SetGrounded(grounded);
                 _previousGroundedState = grounded;
             }
+        }
+
+        private void ProcessJumpRequest()
+        {
+            if (!_jumpRequested)
+            {
+                return;
+            }
+
+            _jumpRequested = false;
+
+            if (_previousGroundedState == true)
+            {
+                ApplyJumpVelocity();
+                _animator.RequestJump();
+                return;
+            }
+
+            if (_settings.CanDoubleJump && _hasDoubleJumpAvailable)
+            {
+                _hasDoubleJumpAvailable = false;
+                ApplyJumpVelocity();
+                _animator.RequestJump();
+            }
+        }
+        
+        /// <summary>
+        /// Calculates the upward speed needed for the character to reach the configured jump height.
+        /// The character starts with this vertical speed, then gravity gradually slows the ascent
+        /// until the character reaches the highest point of the jump.
+        ///
+        /// The calculation comes from the constant-acceleration motion equation:
+        /// finalSpeed² = initialSpeed² + 2 × acceleration × distance.
+        /// At the jump apex, finalSpeed is zero, so the equation becomes:
+        /// initialSpeed = squareRoot(jumpHeight × -2 × gravity).
+        /// </summary>
+        private void ApplyJumpVelocity()
+        {
+            // Physics.gravity.y is negative, so multiplying it by -2 produces a positive value
+            // that can be safely passed to the square root calculation.
+            _verticalVelocity = Mathf.Sqrt(_settings.JumpHeight * -2f * Physics.gravity.y);
         }
 
         private void ApplyRotation(float deltaTime)
