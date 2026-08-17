@@ -1,0 +1,4 @@
+interface:
+  display_name: "XYZ Commit"
+  short_description: "Generate a message and commit staged changes"
+  default_prompt: "Use $xyz-commit to generate the XYZ message and commit the currently staged changes."
