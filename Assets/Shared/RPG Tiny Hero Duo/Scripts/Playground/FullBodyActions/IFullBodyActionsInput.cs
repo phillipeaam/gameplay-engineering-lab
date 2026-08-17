@@ -1,6 +1,6 @@
 using UnityEngine.InputSystem;
 
-namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.FullBodyActions
+namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.FullBodyActions
 {
     public interface IFullBodyActionsInput
     {

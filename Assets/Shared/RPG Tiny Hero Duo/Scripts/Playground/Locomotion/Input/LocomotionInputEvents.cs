@@ -2,14 +2,13 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Locomotion
+namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Input
 {
     public sealed class LocomotionInputEvents
     {
         private readonly InputAction _moveAction;
         private readonly InputAction _jumpAction;
         private readonly InputAction _lookAction;
-        
 
         private bool _isEnabled;
 
@@ -45,6 +44,7 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Locomotion
             _moveAction.Enable();
             _jumpAction.Enable();
             _lookAction.Enable();
+
             _isEnabled = true;
         }
 
@@ -64,6 +64,7 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Locomotion
             _moveAction.Disable();
             _jumpAction.Disable();
             _lookAction.Disable();
+
             _isEnabled = false;
         }
 

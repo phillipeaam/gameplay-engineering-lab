@@ -1,7 +1,7 @@
 using System;
 using UnityEngine.InputSystem;
 
-namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Extensions
+namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Extensions
 {
     internal static class InputActionReferenceExtensions
     {

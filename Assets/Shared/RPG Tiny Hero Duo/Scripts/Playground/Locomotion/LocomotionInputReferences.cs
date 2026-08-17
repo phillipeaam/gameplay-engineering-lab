@@ -1,12 +1,14 @@
 using System;
-using Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Extensions;
+using Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Extensions;
+using Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Landing;
+using Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Input;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Locomotion
+namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion
 {
     [Serializable]
-    public sealed class LocomotionInputReferences : ILocomotionInput, ILocomotionSettings
+    public sealed class LocomotionInputReferences : ILocomotionInput, ILocomotionConfiguration, ILandingSettings
     {
         [Tooltip("Input action used for horizontal and vertical movement.")]
         [SerializeField] private InputActionReference _move;

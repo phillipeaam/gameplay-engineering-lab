@@ -1,8 +1,8 @@
 using System;
 using Shared.RPG_Tiny_Hero_Duo.Scripts.FullBodyActions;
-using Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Shared;
+using Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Shared;
 
-namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.FullBodyActions
+namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.FullBodyActions
 {
     public sealed class FullBodyActionsModule : IAnimationModule
     {

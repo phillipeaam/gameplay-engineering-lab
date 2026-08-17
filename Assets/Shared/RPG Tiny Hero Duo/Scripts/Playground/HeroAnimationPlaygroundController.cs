@@ -1,14 +1,14 @@
 using System;
 using Shared.RPG_Tiny_Hero_Duo.Scripts.FullBodyActions;
 using Shared.RPG_Tiny_Hero_Duo.Scripts.Locomotion;
-using Shared.RPG_Tiny_Hero_Duo.Scripts.Test.FullBodyActions;
-using Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Locomotion;
+using Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.FullBodyActions;
+using Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion;
 using UnityEngine;
 
-namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test
+namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground
 {
     [RequireComponent(typeof(Animator), typeof(CharacterController))]
-    public sealed class HeroAnimationTestDriver : MonoBehaviour
+    public sealed class HeroAnimationPlaygroundController : MonoBehaviour
     {
         [Header("Input")]
         [SerializeField] private LocomotionInputReferences _locomotionInput;
@@ -28,6 +28,7 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test
             _locomotion = new LocomotionModule(
                 characterController,
                 new LocomotionAnimatorAdapter(animator),
+                _locomotionInput,
                 _locomotionInput,
                 _locomotionInput);
 
@@ -58,7 +59,7 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test
             if (_locomotionInput == null || _fullBodyActionsInput == null)
             {
                 throw new InvalidOperationException(
-                    "HeroAnimationTestDriver requires input configurations.");
+                    "HeroAnimationPlaygroundController requires input configurations.");
             }
         }
     }

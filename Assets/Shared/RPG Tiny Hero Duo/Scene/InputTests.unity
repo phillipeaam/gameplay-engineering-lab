@@ -1091,7 +1091,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7ed702d320124f028f96321dbcc14693, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: RPGTinyHeroDuo.Test::Shared.RPG_Tiny_Hero_Duo.Scripts.Test.HeroAnimationTestDriver
+  m_EditorClassIdentifier: RPGTinyHeroDuo.Playground::Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.HeroAnimationPlaygroundController
   _locomotionInput:
     _move: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     _look: {fileID: -5630151704836100654, guid: 052faaac586de48259a63d0c4782560b, type: 3}

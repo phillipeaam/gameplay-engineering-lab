@@ -1,9 +1,9 @@
 using System;
-using Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Extensions;
+using Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Extensions;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.FullBodyActions
+namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.FullBodyActions
 {
     [Serializable]
     public sealed class FullBodyActionsInputReferences : IFullBodyActionsInput

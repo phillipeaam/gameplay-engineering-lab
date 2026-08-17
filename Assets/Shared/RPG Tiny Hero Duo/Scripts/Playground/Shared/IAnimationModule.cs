@@ -1,4 +1,4 @@
-namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Test.Shared
+namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Shared
 {
     public interface IAnimationModule
     {
