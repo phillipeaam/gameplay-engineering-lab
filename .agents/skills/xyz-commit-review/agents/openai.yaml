@@ -1,0 +1,4 @@
+interface:
+  display_name: "XYZ Commit Review"
+  short_description: "Review a generated XYZ commit message before committing"
+  default_prompt: "Use $xyz-commit-review to generate the staged XYZ commit message for my review without creating the commit."
