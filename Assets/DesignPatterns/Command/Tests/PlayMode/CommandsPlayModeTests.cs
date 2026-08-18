@@ -1,8 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
-using DesignPatterns.Command.Scripts;
-using DesignPatterns.Command.Scripts.Study;
+using DesignPatterns.Command.Scripts.InitialCommandStudy;
 using DesignPatterns.Command.Tests.PlayMode.TestDoubles;
 using NUnit.Framework;
 using UnityEngine;

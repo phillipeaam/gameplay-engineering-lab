@@ -1,7 +1,11 @@
 {
     "name": "DesignPatterns.Command.Runtime",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "GUID:4307f53044263cf4b835bd812fc161a4",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:f06555f75b070af458a003d92f9efb00"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

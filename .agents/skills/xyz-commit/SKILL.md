@@ -1,17 +1,17 @@
 ---
 name: xyz-commit
-description: Generate structured XYZ Git commit messages from currently staged changes.
+description: Generate an XYZ Git commit message and commit the currently staged changes using that message.
 ---
 
 # XYZ Commit
 
 When invoked:
 
-1. Read `SPEC.md` in this skill directory.
+1. Read `../xyz-commit-review/SPEC.md`.
 2. Inspect only the currently staged Git changes.
-3. Analyze the staged diff and repository context when necessary.
+3. If there are no staged changes, report that no commit was created.
 4. Generate the commit message according to the XYZ specification.
 5. Never invent motivations, tests, validation, references, or performance results.
-6. Do not modify files.
-7. Do not create the commit unless explicitly requested.
-8. Output only the final commit message.
+6. Preserve unstaged changes; commit only the staged changes.
+7. Create the Git commit using exactly the generated message.
+8. Report the resulting commit hash and message.
