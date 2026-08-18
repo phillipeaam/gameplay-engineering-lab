@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project Quality"
+  short_description: "Review changes against the project quality standard"
+  default_prompt: "Use $project-quality to review the currently staged changes against the project quality standard."
