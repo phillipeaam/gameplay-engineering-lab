@@ -5,6 +5,7 @@
 - [Ownership boundaries](#1-ownership-boundaries)
 - [Packages and build configuration](#2-packages-and-build-configuration)
 - [Documentation and learning value](#3-documentation-and-learning-value)
+- [Pull request delivery](#4-pull-request-delivery)
 
 ## 1. Ownership boundaries
 
@@ -37,3 +38,25 @@
   ownership, lifetime, side effects, and failure behavior.
 - Documentation changes MUST accompany behavior changes when existing guidance
   would otherwise become false.
+
+## 4. Pull request delivery
+
+- Each pull request MUST represent one cohesive objective. Unrelated cleanup,
+  broad refactoring, vendor imports, generated changes, or dependency upgrades
+  SHOULD be separated when combining them obscures review or rollback.
+- The title MUST describe the result using the repository's Conventional Commit
+  form: `<type>(<scope>): <summary>`.
+- The description MUST preserve the reason, important decisions, impact, risk,
+  and validation status relevant to the change.
+- Validation MUST distinguish checks present in the diff from checks actually
+  executed. Missing execution MUST be reported as `Not run`, with a reason.
+- Player-facing visual changes SHOULD include representative visual evidence
+  when tests and the diff cannot communicate the result adequately.
+- Authored or serialized Unity changes MUST identify the relevant scene, prefab,
+  platform, input, settings, or reference risks when applicable.
+- Pull request size is a review-cost signal, not a universal numeric gate.
+  Large cohesive generated or serialized diffs require context; small changes
+  still require validation proportional to risk.
+- Use `.github/pull_request_template.md` for the canonical description structure
+  and `.agents/skills/prepare-pull-request/references/pull-request-standard.md`
+  for operating guidance, metrics, and authoritative industry references.
