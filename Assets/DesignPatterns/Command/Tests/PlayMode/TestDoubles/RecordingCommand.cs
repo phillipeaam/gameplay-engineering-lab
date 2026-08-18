@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading;
-using DesignPatterns.Command.Scripts.Study;
+using DesignPatterns.Command.Scripts.InitialCommandStudy;
 using UnityEngine;
 
 namespace DesignPatterns.Command.Tests.PlayMode.TestDoubles

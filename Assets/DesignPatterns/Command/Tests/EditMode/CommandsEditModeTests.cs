@@ -1,5 +1,5 @@
 using System.Threading;
-using DesignPatterns.Command.Scripts.Study;
+using DesignPatterns.Command.Scripts.InitialCommandStudy;
 using DesignPatterns.Command.Tests.EditMode.TestDoubles;
 using NUnit.Framework;
 using UnityEngine;
