@@ -82,7 +82,7 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion
             _input.Disable();
 
             _isEnabled = false;
-            
+
             OnMovementChanged(Vector2.zero);
             CancelJumpRequest();
             OnLookChanged(Vector2.zero);
