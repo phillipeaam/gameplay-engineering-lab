@@ -1,0 +1,4 @@
+interface:
+  display_name: "Prepare Pull Request"
+  short_description: "Prepare evidence-based, reviewable pull requests"
+  default_prompt: "Use $prepare-pull-request to prepare or review this pull request against the project standard."

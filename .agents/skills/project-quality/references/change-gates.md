@@ -58,6 +58,17 @@
 - Compatibility, licensing, build impact, and rollback are considered.
 - A relevant build, package resolution, or tool execution is validated.
 
+### 1.8 Pull request evidence
+
+- The title identifies the primary type, domain, and result.
+- The description states why the change exists and avoids restating the diff.
+- Validation claims are supported by observed output or explicitly supplied
+  evidence; checks not executed are identified as `Not run`.
+- Material impact, compatibility, Unity serialization, platform, performance,
+  migration, and rollback risks are disclosed when relevant.
+- The reviewer focus identifies non-obvious decisions or risk areas for a
+  non-trivial change.
+
 ## 2. Metrics and automation maturity
 
 Track trends on changed code first. Current review-level signals are:
@@ -72,6 +83,8 @@ Track trends on changed code first. Current review-level signals are:
 | Performance | Regressions against an established budget | 0 unexplained |
 | Organization | Runtime/Test/Editor/vendor boundary violations | 0 |
 | Delivery | Unrelated change mixed into scope | 0 when avoidable |
+| PR evidence | Unsupported validation or performance claims | 0 |
+| PR reviewability | Required context, risk, and validation status | Explicit |
 
 The following become hard automated gates only after their tooling is committed
 and reproducible:
