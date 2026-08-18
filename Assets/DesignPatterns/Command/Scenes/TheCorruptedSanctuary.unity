@@ -5574,6 +5574,9 @@ MonoBehaviour:
   _dangerOne: {r: 1, g: 0.15, b: 0.1, a: 0.65}
   _dangerTwo: {r: 0.8, g: 0.1, b: 0.5, a: 0.45}
   _dangerThree: {r: 0.55, g: 0.15, b: 0.8, a: 0.3}
+  _hudPanelSettings: {fileID: 11400000, guid: b71c411188bc24aee8550882e1110829, type: 2}
+  _hudLayout: {fileID: 9197481963319205126, guid: c159f94bfa7194a31824e74cf6200367, type: 3}
+  _hudStyles: {fileID: 7433441132597879392, guid: 28e5c118d2c824a86896dcc00c261183, type: 3}
 --- !u!4 &1325195359
 Transform:
   m_ObjectHideFlags: 0

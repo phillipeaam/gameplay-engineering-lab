@@ -1,0 +1,116 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="hud-root" class="hud-root">
+        <ui:VisualElement name="status-panel" class="glass-panel hud-chrome status-panel">
+            <ui:VisualElement class="title-row">
+                <ui:VisualElement>
+                    <ui:Label text="THE CORRUPTED SANCTUARY" class="eyebrow" />
+                    <ui:Label text="The Last Sequence" class="screen-title" />
+                </ui:VisualElement>
+                <ui:Label name="phase-label" text="INTRO" class="phase-chip" />
+            </ui:VisualElement>
+            <ui:VisualElement class="metrics-row">
+                <ui:VisualElement class="metric metric-health">
+                    <ui:Label text="VITALITY" class="metric-caption" />
+                    <ui:Label name="health-label" text="♥♥♥" class="metric-value hearts" />
+                </ui:VisualElement>
+                <ui:VisualElement class="metric">
+                    <ui:Label text="TURN" class="metric-caption" />
+                    <ui:Label name="turn-label" text="1 / 8" class="metric-value" />
+                </ui:VisualElement>
+                <ui:VisualElement class="metric last-metric">
+                    <ui:Label text="ANCHORS" class="metric-caption" />
+                    <ui:Label name="anchors-label" text="0 / 3" class="metric-value" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement class="score-row">
+                <ui:Label name="score-label" text="SCORE  0000" class="score-label" />
+                <ui:Label name="multiplier-label" text="×1" class="multiplier-label" />
+                <ui:Label name="seed-label" text="FOREST-1042" class="seed-label" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="sequence-panel" class="glass-panel hud-chrome sequence-panel">
+            <ui:VisualElement class="section-heading-row">
+                <ui:Label text="BEAT TIMELINE" class="section-heading" />
+                <ui:Label text="TURN ORDER" class="section-kicker" />
+            </ui:VisualElement>
+            <ui:VisualElement class="beat-card player-beat sequence-slot first-sequence-slot">
+                <ui:Label text="PLAYER 01" class="slot-index" />
+                <ui:Label name="plan-1" text="—" class="plan-command" />
+            </ui:VisualElement>
+            <ui:VisualElement class="beat-card enemy-beat sequence-slot">
+                <ui:Label text="GUARDIAN 01" class="slot-index" />
+                <ui:Label name="intent-1" text="UNKNOWN" class="intent-label" />
+            </ui:VisualElement>
+            <ui:VisualElement class="beat-card player-beat sequence-slot">
+                <ui:Label text="PLAYER 02" class="slot-index" />
+                <ui:Label name="plan-2" text="—" class="plan-command" />
+            </ui:VisualElement>
+            <ui:VisualElement class="beat-card enemy-beat sequence-slot">
+                <ui:Label text="GUARDIAN 02" class="slot-index" />
+                <ui:Label name="intent-2" text="UNKNOWN" class="intent-label" />
+            </ui:VisualElement>
+            <ui:VisualElement class="beat-card player-beat sequence-slot">
+                <ui:Label text="PLAYER 03" class="slot-index" />
+                <ui:Label name="plan-3" text="—" class="plan-command" />
+            </ui:VisualElement>
+            <ui:VisualElement class="beat-card enemy-beat sequence-slot">
+                <ui:Label text="GUARDIAN 03" class="slot-index" />
+                <ui:Label name="intent-3" text="UNKNOWN" class="intent-label" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="command-dock" class="glass-panel hud-chrome command-dock">
+            <ui:VisualElement class="message-strip">
+                <ui:VisualElement class="message-glyph"><ui:Label text="◆" /></ui:VisualElement>
+                <ui:Label name="message-label" text="The sanctuary remembers..." class="message-label" />
+                <ui:Label text="ENTER Execute · BACKSPACE Undo · DELETE Clear" class="keyboard-hint" />
+            </ui:VisualElement>
+
+            <ui:VisualElement name="planning-controls" class="planning-controls">
+                    <ui:VisualElement class="command-modes">
+                        <ui:Label text="MOVE MODE" class="control-caption" />
+                        <ui:VisualElement class="button-row mode-toggle">
+                            <ui:Button name="step-button" text="1  STEP" class="command-button mode-button toggle-left" />
+                            <ui:Button name="dash-button" text="2  DASH" class="command-button mode-button toggle-right" />
+                        </ui:VisualElement>
+                        <ui:VisualElement class="button-row utility-row">
+                            <ui:Button name="guard-button" text="3  GUARD" class="command-button utility-button" />
+                            <ui:Button name="wait-button" text="4  WAIT" class="command-button utility-button last-button" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+
+                    <ui:VisualElement class="direction-group">
+                        <ui:Label text="DIRECTION" class="control-caption centered-caption" />
+                        <ui:VisualElement class="dpad">
+                            <ui:Button name="up-button" text="↑" class="direction-button dpad-up" />
+                            <ui:Button name="left-button" text="←" class="direction-button dpad-left" />
+                            <ui:Button name="down-button" text="↓" class="direction-button dpad-down" />
+                            <ui:Button name="right-button" text="→" class="direction-button dpad-right" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+
+                    <ui:VisualElement class="execution-group">
+                        <ui:Label text="SEQUENCE" class="control-caption" />
+                        <ui:Button name="confirm-button" text="EXECUTE PLAN" class="confirm-button" />
+                        <ui:VisualElement class="button-row edit-row">
+                            <ui:Button name="undo-button" text="UNDO" class="edit-button" />
+                            <ui:Button name="clear-button" text="CLEAR" class="edit-button last-button" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="results-panel" class="results-panel is-hidden">
+            <ui:VisualElement class="results-card glass-panel">
+                <ui:Label text="SEQUENCE RESOLVED" class="eyebrow centered-label" />
+                <ui:Label name="result-title" text="THE SANCTUARY REMEMBERS" class="result-title" />
+                <ui:Label name="result-summary" text="Score 0000  ·  Seed FOREST-1042" class="result-summary" />
+                <ui:VisualElement class="button-row result-actions">
+                    <ui:Button name="replay-button" text="REPLAY SEED" class="command-button" />
+                    <ui:Button name="new-run-button" text="NEW RUN" class="confirm-button compact-confirm" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
+using UnityEngine.UIElements;
 
 namespace DesignPatterns.Command.Scripts.TheCorruptedSanctuary.Composition
 {
@@ -32,6 +33,11 @@ namespace DesignPatterns.Command.Scripts.TheCorruptedSanctuary.Composition
         [SerializeField] private Color _dangerOne = new(1f, 0.15f, 0.1f, 0.65f);
         [SerializeField] private Color _dangerTwo = new(0.8f, 0.1f, 0.5f, 0.45f);
         [SerializeField] private Color _dangerThree = new(0.55f, 0.15f, 0.8f, 0.3f);
+
+        [Header("UI Toolkit")]
+        [SerializeField] private PanelSettings _hudPanelSettings;
+        [SerializeField] private VisualTreeAsset _hudLayout;
+        [SerializeField] private StyleSheet _hudStyles;
 
         private readonly List<PlayerCommandData> _pendingCommands = new(TurnPlan.CommandCount);
         private readonly List<GameObject> _telegraphs = new();
@@ -56,6 +62,8 @@ namespace DesignPatterns.Command.Scripts.TheCorruptedSanctuary.Composition
         private CinemachineCamera[] _runtimeIntroCameras;
         private CinemachineCamera[] _runtimeFinaleCameras;
         private CinemachineCamera _runtimeGameplayCamera;
+        private UIDocument _hudDocument;
+        private SanctuaryHudView _hudView;
 
         public EncounterPhase Phase => _phase;
         public EncounterState State => _state;
@@ -68,6 +76,7 @@ namespace DesignPatterns.Command.Scripts.TheCorruptedSanctuary.Composition
             EnsureCameraAndLight();
             BuildBoardVisuals();
             BuildActors();
+            SetupHud();
             _turnRunner = gameObject.AddComponent<TurnRunner>();
             _turnRunner.Configure(_playerView, _guardianView);
             _turnRunner.BeatCompleted += PresentBeat;
@@ -82,6 +91,7 @@ namespace DesignPatterns.Command.Scripts.TheCorruptedSanctuary.Composition
             }
 
             CancelExecution();
+            _hudView?.Dispose();
         }
 
         private void Update()
@@ -92,8 +102,15 @@ namespace DesignPatterns.Command.Scripts.TheCorruptedSanctuary.Composition
             }
 
             var keyboard = Keyboard.current;
-            if (keyboard.digit1Key.wasPressedThisFrame) _selectedCommand = PlayerCommandType.Step;
-            if (keyboard.digit2Key.wasPressedThisFrame) _selectedCommand = PlayerCommandType.Dash;
+            if (keyboard.digit1Key.wasPressedThisFrame)
+            {
+                SelectMovementMode(PlayerCommandType.Step);
+            }
+
+            if (keyboard.digit2Key.wasPressedThisFrame)
+            {
+                SelectMovementMode(PlayerCommandType.Dash);
+            }
             if (keyboard.digit3Key.wasPressedThisFrame) AddCommand(PlayerCommandData.Guard());
             if (keyboard.digit4Key.wasPressedThisFrame) AddCommand(PlayerCommandData.Wait());
 
@@ -109,6 +126,34 @@ namespace DesignPatterns.Command.Scripts.TheCorruptedSanctuary.Composition
             if (keyboard.backspaceKey.wasPressedThisFrame) RemoveLastCommand();
             if (keyboard.deleteKey.wasPressedThisFrame) ClearCommands();
             if (keyboard.enterKey.wasPressedThisFrame || keyboard.spaceKey.wasPressedThisFrame) ConfirmPlan();
+        }
+
+        private void SetupHud()
+        {
+            if (_hudPanelSettings == null || _hudLayout == null || _hudStyles == null)
+            {
+                Debug.LogError("The Corrupted Sanctuary UI Toolkit assets are not fully configured.", this);
+                return;
+            }
+
+            var hudObject = new GameObject("Sanctuary HUD");
+            hudObject.transform.SetParent(transform);
+            _hudDocument = hudObject.AddComponent<UIDocument>();
+            _hudDocument.panelSettings = _hudPanelSettings;
+            _hudDocument.visualTreeAsset = _hudLayout;
+            _hudDocument.rootVisualElement.styleSheets.Add(_hudStyles);
+
+            _hudView = new SanctuaryHudView(_hudDocument.rootVisualElement);
+            _hudView.StepSelected += () => SelectMovementMode(PlayerCommandType.Step);
+            _hudView.DashSelected += () => SelectMovementMode(PlayerCommandType.Dash);
+            _hudView.GuardRequested += () => AddCommand(PlayerCommandData.Guard());
+            _hudView.WaitRequested += () => AddCommand(PlayerCommandData.Wait());
+            _hudView.DirectionRequested += AddDirectionalCommand;
+            _hudView.UndoRequested += RemoveLastCommand;
+            _hudView.ClearRequested += ClearCommands;
+            _hudView.ConfirmRequested += ConfirmPlan;
+            _hudView.ReplayRequested += () => StartRun(_seed);
+            _hudView.NewRunRequested += () => StartRun(CreateSeed());
         }
 
         public void StartRun(string seed)
@@ -146,6 +191,7 @@ namespace DesignPatterns.Command.Scripts.TheCorruptedSanctuary.Composition
         {
             _phase = EncounterPhase.Intro;
             _message = "The sanctuary remembers...";
+            RefreshHud();
             _guardianView.PresentIntroReveal();
             if (_runtimeIntroCameras != null)
             {
@@ -372,6 +418,7 @@ namespace DesignPatterns.Command.Scripts.TheCorruptedSanctuary.Composition
             if (!validation.IsValid)
             {
                 _message = validation.Message;
+                RefreshHud();
                 return;
             }
 
@@ -411,6 +458,7 @@ namespace DesignPatterns.Command.Scripts.TheCorruptedSanctuary.Composition
             if (!validation.IsValid)
             {
                 _message = validation.Message;
+                RefreshHud();
                 return;
             }
 
@@ -428,6 +476,7 @@ namespace DesignPatterns.Command.Scripts.TheCorruptedSanctuary.Composition
                 _phase = EncounterPhase.Executing;
                 _message = "Executing sequence";
                 ClearRouteMarkers();
+                RefreshHud();
 
                 var result = _simulator.Simulate(_state, plan, _currentPattern);
                 await _turnRunner.ExecuteAsync(result, cancellationToken);
@@ -442,14 +491,17 @@ namespace DesignPatterns.Command.Scripts.TheCorruptedSanctuary.Composition
                         await RunFinaleAsync(cancellationToken);
                         _phase = EncounterPhase.Results;
                         _message = "Sequence complete";
+                        RefreshHud();
                         break;
                     case EncounterOutcome.HealthDefeat:
                         _phase = EncounterPhase.Results;
                         _message = "Guardian prevailed";
+                        RefreshHud();
                         break;
                     case EncounterOutcome.TurnLimitDefeat:
                         _phase = EncounterPhase.Results;
                         _message = "Sanctuary collapsed";
+                        RefreshHud();
                         break;
                     default:
                         ClearCommands();
@@ -460,12 +512,14 @@ namespace DesignPatterns.Command.Scripts.TheCorruptedSanctuary.Composition
             catch (OperationCanceledException)
             {
                 _message = "Execution cancelled";
+                RefreshHud();
             }
             catch (Exception exception)
             {
                 Debug.LogException(exception, this);
                 _phase = EncounterPhase.Results;
                 _message = "Sequence failed; see Console";
+                RefreshHud();
             }
         }
 
@@ -491,6 +545,7 @@ namespace DesignPatterns.Command.Scripts.TheCorruptedSanctuary.Composition
             var validation = _simulator.ValidatePlan(_state, plan);
             _preview = validation.IsValid ? _simulator.Simulate(_state, plan, _currentPattern) : null;
             RefreshRouteMarkers();
+            RefreshHud();
         }
 
         private TurnPlan CreateCompletedPlan()
@@ -509,6 +564,17 @@ namespace DesignPatterns.Command.Scripts.TheCorruptedSanctuary.Composition
             AddCommand(_selectedCommand == PlayerCommandType.Dash
                 ? PlayerCommandData.Dash(direction)
                 : PlayerCommandData.Step(direction));
+        }
+
+        private void SelectMovementMode(PlayerCommandType commandType)
+        {
+            if (_phase != EncounterPhase.Planning || commandType is not (PlayerCommandType.Step or PlayerCommandType.Dash))
+            {
+                return;
+            }
+
+            _selectedCommand = commandType;
+            RefreshHud();
         }
 
         private void PresentBeat(BeatResult beat)
@@ -534,6 +600,8 @@ namespace DesignPatterns.Command.Scripts.TheCorruptedSanctuary.Composition
             {
                 _message = $"Plan exposed you on Beat {beat.BeatIndex + 1}";
             }
+
+            RefreshHud();
         }
 
         private void PresentState()
@@ -557,12 +625,15 @@ namespace DesignPatterns.Command.Scripts.TheCorruptedSanctuary.Composition
                     ? new Color(0.04f, 0.04f, 0.04f)
                     : _gridColor);
             }
+
+            RefreshHud();
         }
 
         private async Awaitable RunFinaleAsync(CancellationToken cancellationToken)
         {
             _phase = EncounterPhase.Finale;
             _message = "Guardian exposed";
+            RefreshHud();
 
             if (_runtimeFinaleCameras != null)
             {
@@ -938,40 +1009,78 @@ namespace DesignPatterns.Command.Scripts.TheCorruptedSanctuary.Composition
 
         private static string CreateSeed() => $"FOREST-{UnityEngine.Random.Range(0, 10000):0000}";
 
-        private void OnGUI()
+        private void RefreshHud()
         {
-            var panel = new Rect(20f, 20f, 440f, 230f);
-            GUI.Box(panel, GUIContent.none);
-            GUILayout.BeginArea(new Rect(panel.x + 16f, panel.y + 12f, panel.width - 32f, panel.height - 24f));
-
-            GUILayout.Label($"THE LAST SEQUENCE   |   {_phase}");
-            if (_state != null)
+            if (_hudView == null || _state == null)
             {
-                GUILayout.Label($"Health: {new string('♥', _state.Player.Health)}   Turn: {_state.Turn + 1}/8   Score: {_state.Score} ×{_state.Multiplier}");
-                GUILayout.Label($"Seed: {_state.Seed}   Anchors: {_state.DestroyedAnchorCount}/3");
+                return;
             }
 
+            var health = Mathf.Clamp(_state.Player.Health, 0, 3);
+            var hearts = new string('♥', health) + new string('♡', 3 - health);
+            var intents = new[] { "UNKNOWN", "UNKNOWN", "UNKNOWN" };
             if (_currentPattern != null)
             {
-                GUILayout.Label("Guardian: " + string.Join("  →  ", _currentPattern.Intents.Select(intent => intent.DisplayName)));
+                for (var index = 0; index < Mathf.Min(intents.Length, _currentPattern.Intents.Count); index++)
+                {
+                    intents[index] = _currentPattern.Intents[index].DisplayName.ToUpperInvariant();
+                }
             }
 
-            GUILayout.Label("Plan: " + (_pendingCommands.Count == 0
-                ? "[Wait] → [Wait] → [Wait]"
-                : string.Join(" → ", _pendingCommands.Select(command => command.ToString()))));
-            GUILayout.Label($"Selected: {_selectedCommand}   |   1 Step  2 Dash  3 Guard  4 Wait");
-            GUILayout.Label("WASD/Arrows add direction · Backspace undo · Enter execute");
-            GUILayout.Label(_message);
-
-            if (_phase == EncounterPhase.Results)
+            var commands = new[] { "—", "—", "—" };
+            for (var index = 0; index < Mathf.Min(commands.Length, _pendingCommands.Count); index++)
             {
-                GUILayout.BeginHorizontal();
-                if (GUILayout.Button("Replay Seed")) StartRun(_seed);
-                if (GUILayout.Button("New Run")) StartRun(CreateSeed());
-                GUILayout.EndHorizontal();
+                commands[index] = FormatCommand(_pendingCommands[index]);
             }
 
-            GUILayout.EndArea();
+            var showResults = _phase == EncounterPhase.Results;
+            var resultTitle = _message switch
+            {
+                "Sequence complete" => "SANCTUARY RELEASED",
+                "Guardian prevailed" => "THE GUARDIAN PREVAILED",
+                "Sanctuary collapsed" => "THE SANCTUARY COLLAPSED",
+                _ => "SEQUENCE RESOLVED"
+            };
+
+            _hudView.Present(new SanctuaryHudState(
+                _phase.ToString().ToUpperInvariant(),
+                hearts,
+                $"{_state.Turn + 1} / 8",
+                $"{_state.DestroyedAnchorCount} / 3",
+                $"SCORE  {_state.Score:0000}",
+                $"×{_state.Multiplier}",
+                _state.Seed,
+                _message,
+                intents,
+                commands,
+                _selectedCommand == PlayerCommandType.Dash,
+                _phase == EncounterPhase.Planning,
+                _phase is not (EncounterPhase.Intro or EncounterPhase.Finale),
+                showResults,
+                resultTitle,
+                $"Score {_state.Score:0000}  ·  Seed {_state.Seed}"));
+        }
+
+        private static string FormatCommand(PlayerCommandData command)
+        {
+            if (command.Type == PlayerCommandType.Guard)
+            {
+                return "GUARD";
+            }
+
+            if (command.Type == PlayerCommandType.Wait)
+            {
+                return "WAIT";
+            }
+
+            var direction = command.Direction == Vector2Int.up
+                ? "↑"
+                : command.Direction == Vector2Int.down
+                    ? "↓"
+                    : command.Direction == Vector2Int.left
+                        ? "←"
+                        : "→";
+            return $"{command.Type.ToString().ToUpperInvariant()}  {direction}";
         }
     }
 }
