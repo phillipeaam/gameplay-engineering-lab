@@ -1,0 +1,22 @@
+{
+    "name": "RPGTinyHeroDuo.Playground.Tests.PlayMode",
+    "rootNamespace": "",
+    "references": [
+        "GUID:582898c8f38b14e3c89260679252d102",
+        "GUID:c3864e7791d24c53b8c02534bd34e116",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:dc04f38471c3a459fb4d31124ee9127d",
+        "GUID:c12b1fe2c26e94ab7a33340d76bfb06f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
