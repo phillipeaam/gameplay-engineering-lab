@@ -82,6 +82,10 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion
             _input.Disable();
 
             _isEnabled = false;
+            
+            OnMovementChanged(Vector2.zero);
+            CancelJumpRequest();
+            OnLookChanged(Vector2.zero);
         }
 
         private void OnMovementChanged(Vector2 movement)
@@ -140,5 +144,9 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion
             return stateChange;
         }
 
+        private void CancelJumpRequest()
+        {
+            _jump.CancelJumpRequest();
+        }
     }
 }

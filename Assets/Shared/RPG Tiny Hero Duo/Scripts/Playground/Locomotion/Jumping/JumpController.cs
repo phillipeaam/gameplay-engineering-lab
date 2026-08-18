@@ -102,5 +102,10 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Jumping
             // initialSpeed = squareRoot(jumpHeight × -2 × gravity).
             VerticalVelocity = Mathf.Sqrt(_configuration.JumpHeight * -2f * Physics.gravity.y);
         }
+        
+        public void CancelJumpRequest()
+        {
+            _jumpRequested = false;
+        }
     }
 }
