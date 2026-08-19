@@ -1,6 +1,7 @@
+using System;
 using Shared.RPG_Tiny_Hero_Duo.Scripts.Locomotion;
+using Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Extensions;
 using Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Grounding;
-using Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Landing;
 using UnityEngine;
 
 namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Jumping
@@ -9,9 +10,8 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Jumping
     {
         private const float GroundedVerticalVelocity = -2f;
 
-        private readonly ILocomotionConfiguration _configuration;
-        private readonly ILocomotionAnimator _animator;
-        private readonly LandingRecovery _landingRecovery;
+        private readonly IJumpSettings _settings;
+        private readonly IJumpAnimator _jumpAnimator;
 
         private bool _hasDoubleJumpAvailable;
         private bool _jumpRequested;
@@ -19,14 +19,15 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Jumping
         public float VerticalVelocity { get; private set; }
 
         public JumpController(
-            ILocomotionConfiguration configuration,
-            ILocomotionAnimator animator,
-            LandingRecovery landingRecovery)
+            IJumpSettings jumpSettings,
+            IJumpAnimator jumpAnimator)
         {
-            _configuration = configuration;
-            _animator = animator;
-            _landingRecovery = landingRecovery;
-            _hasDoubleJumpAvailable = configuration.CanDoubleJump;
+            _settings = jumpSettings.RequireValid();
+
+            _jumpAnimator = jumpAnimator
+                ?? throw new ArgumentNullException(nameof(jumpAnimator));
+
+            _hasDoubleJumpAvailable = jumpSettings.CanDoubleJump;
         }
 
         public void RequestJump()
@@ -59,13 +60,13 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Jumping
 
             // Touching the ground starts a new jump sequence, so the double jump becomes
             // available again. The setting is read here so runtime changes are respected.
-            if (stateChange.HasChanged || _hasDoubleJumpAvailable != _configuration.CanDoubleJump)
+            if (stateChange.HasChanged || _hasDoubleJumpAvailable != _settings.CanDoubleJump)
             {
-                _hasDoubleJumpAvailable = _configuration.CanDoubleJump;
+                _hasDoubleJumpAvailable = _settings.CanDoubleJump;
             }
         }
 
-        public void ProcessRequest(bool isGrounded)
+        public void ProcessRequest(bool isGrounded, bool isJumpBlocked)
         {
             if (!_jumpRequested)
             {
@@ -74,7 +75,7 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Jumping
 
             _jumpRequested = false;
 
-            if (_landingRecovery.TimeRemaining > 0f)
+            if (isJumpBlocked)
             {
                 return;
             }
@@ -82,25 +83,38 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Jumping
             if (isGrounded)
             {
                 ApplyJumpVelocity();
-                _animator.RequestJump();
+                _jumpAnimator.RequestJump();
                 return;
             }
 
-            if (_configuration.CanDoubleJump && _hasDoubleJumpAvailable)
+            if (_settings.CanDoubleJump && _hasDoubleJumpAvailable)
             {
                 _hasDoubleJumpAvailable = false;
                 ApplyJumpVelocity();
-                _animator.RequestJump();
+                _jumpAnimator.RequestJump();
             }
         }
 
         private void ApplyJumpVelocity()
         {
+            var jumpHeight = _settings.GetValidatedJumpHeight();
+            var gravity = Physics.gravity.y;
+
             // The formula comes from the constant-acceleration motion equation:
             // finalSpeed² = initialSpeed² + 2 × acceleration × distance.
             // At the jump apex, finalSpeed is zero, so:
             // initialSpeed = squareRoot(jumpHeight × -2 × gravity).
-            VerticalVelocity = Mathf.Sqrt(_configuration.JumpHeight * -2f * Physics.gravity.y);
+            var jumpVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+
+            if (!jumpVelocity.IsFinite())
+            {
+                throw new InvalidOperationException(
+                    $"{nameof(JumpController)} produced a non-finite jump velocity. " +
+                    $"Jump height: {jumpHeight}, gravity: {gravity}, " +
+                    $"jump velocity: {jumpVelocity}.");
+            }
+
+            VerticalVelocity = jumpVelocity;
         }
 
         public void CancelJumpRequest()

@@ -17,6 +17,9 @@
   expose the relevant failure.
 - A bug fix MUST include a regression test when the behavior can be isolated.
   Otherwise document why and provide the strongest practical validation.
+- Mutable configuration SHOULD be tested both when initially invalid and when
+  it becomes invalid after successful composition when those moments exercise
+  different validation boundaries.
 - New gameplay behavior MUST test the main success path and relevant failure,
   boundary, or lifecycle-sensitive paths.
 
@@ -26,8 +29,14 @@
   and deterministic.
 - Tests SHOULD follow Arrange–Act–Assert with one primary action or scenario.
 - Names SHOULD communicate behavior, scenario, and expected outcome.
+- Tests SHOULD include a concise XML `<summary>` that explains the behavioral
+  contract, regression, or design decision being protected rather than merely
+  restating the test name.
 - Assert observable outputs, state, interactions, or side effects; do not test
   private implementation details.
+- Do not widen a production API solely for testing. A runtime assembly MAY grant
+  a dedicated test assembly access to internal contracts when that enables a
+  lower, deterministic test boundary without creating a runtime dependency.
 - Control time, random seeds, input, and external state when they affect results.
 - Avoid order dependencies, shared mutable fixtures, real waits, and arbitrary
   frame counts when a deterministic signal is available.
@@ -50,6 +59,9 @@
 
 - Validate untrusted or persisted data before use and fail safely with actionable
   diagnostics.
+- Numeric tests SHOULD cover non-finite inputs and non-finite calculated results
+  when those values can reach physics, transforms, animation, persistence, or
+  native APIs.
 - Persistence changes MUST define compatibility, migration, corruption handling,
   and failure atomicity when player data is at risk.
 - Logs MUST be actionable, appropriately leveled, and free of secrets. Avoid

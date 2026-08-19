@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Locomotion
 {
-    public sealed class LocomotionAnimatorAdapter : ILocomotionAnimator
+    public sealed class LocomotionAnimatorAdapter : IMovementAnimator, IJumpAnimator
     {
         private static readonly int MoveX = Animator.StringToHash("MoveX");
         private static readonly int MoveY = Animator.StringToHash("MoveY");

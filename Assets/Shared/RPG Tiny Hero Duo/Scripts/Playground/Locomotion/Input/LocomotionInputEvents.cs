@@ -18,10 +18,7 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Input
 
         public LocomotionInputEvents(ILocomotionInput input)
         {
-            if (input == null)
-            {
-                throw new ArgumentNullException(nameof(input));
-            }
+            input.RequireValid();
 
             _moveAction = input.Move;
             _jumpAction = input.Jump;

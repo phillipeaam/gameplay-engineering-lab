@@ -9,6 +9,10 @@ namespace DesignPatterns.Command.Tests.EditMode
 {
     public class CommandsEditModeTests
     {
+        /// <summary>
+        /// Verifies that executing a move command delegates the requested destination to
+        /// its actor, preserving the command's responsibility as an executable request.
+        /// </summary>
         [Test]
         public void Execute_MovesActorToTargetPosition()
         {
