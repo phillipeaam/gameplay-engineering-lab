@@ -48,6 +48,10 @@ namespace DesignPatterns.Command.Tests.PlayMode
             _cancellationTokenSource = null;
         }
         
+        /// <summary>
+        /// Verifies that processing an asynchronous command sequence completes with the
+        /// actor at the final requested destination rather than an intermediate position.
+        /// </summary>
         [UnityTest]
         public IEnumerator ProcessCommandsAsync_CompletesWithActorAtFinalDestination()
         {
@@ -74,6 +78,10 @@ namespace DesignPatterns.Command.Tests.PlayMode
             Assert.That(_actor.GetPosition(), Is.EqualTo(Vector2.right));
         }
 
+        /// <summary>
+        /// Verifies that the processor awaits each command before starting the next one,
+        /// preserving deterministic command order and preventing overlapping execution.
+        /// </summary>
         [UnityTest]
         public IEnumerator ProcessCommandsAsync_ExecutesCommandsSequentially()
         {
