@@ -26,6 +26,25 @@ as the playground controller does, but consumers receive only the contract they
 need. This keeps feature dependencies narrow without requiring three separate
 Unity configuration assets.
 
+## Validation and mutable implementations
+
+Constructors validate required references and the current setting values so an
+invalid graph fails during composition. Values that participate in calculations
+are also revalidated when consumed. Constructor validation alone would become
+stale because these contracts expose getters rather than immutable value
+objects, and implementations are deliberately allowed to change at runtime.
+
+Movement and rotation speeds are therefore checked on each motor operation,
+jump height is checked when a jump velocity is calculated, and landing settings
+are checked when recovery starts. `CanDoubleJump` remains a runtime policy: it
+is read while processing a request and the available-jump state is reconciled
+when grounded state is updated.
+
+This design accepts a small amount of repeated validation in exchange for
+supporting live tuning and other mutable implementations without allowing a
+post-composition mutation to introduce NaN, infinity, an invalid range, or a
+negative value into locomotion calculations.
+
 ## State ownership and collaboration
 
 `LocomotionModule` owns the `LandingRecovery` instance and advances it once per
@@ -50,6 +69,14 @@ depends only on its relevant visual capability.
   consumer would depend on unrelated settings and independent policies would be
   harder to substitute or test. Narrow contracts were chosen; a single concrete
   object can still implement all of them when convenient.
+- **Validate only during composition:** avoids repeated checks, but silently
+  assumes immutable implementations. Revalidation at calculation boundaries was
+  chosen to preserve deliberate runtime mutability and fail close to the
+  invalid value.
+- **Copy every setting into immutable constructor values:** establishes a strong
+  invariant and reduces runtime checks, but prevents live tuning and defers
+  configuration changes until the module is rebuilt. The contracts remain live
+  instead.
 - **Keep landing recovery state in `LocomotionModule`:** reduces the type count,
   but mixes timing and interpolation policy into orchestration. A dedicated
   owner makes the recovery lifecycle and multiplier invariant explicit.
@@ -61,6 +88,8 @@ depends only on its relevant visual capability.
 
 ## When to revisit
 
-If landing restrictions become a broader set of composable gameplay conditions,
-`isJumpBlocked` may evolve into a policy-level jump permission contract; the
-concrete recovery object should still remain outside `JumpController`.
+If runtime mutation is no longer required, immutable settings snapshots could
+replace consumption-time validation. If landing restrictions become a broader
+set of composable gameplay conditions, `isJumpBlocked` may evolve into a
+policy-level jump permission contract; the concrete recovery object should
+still remain outside `JumpController`.

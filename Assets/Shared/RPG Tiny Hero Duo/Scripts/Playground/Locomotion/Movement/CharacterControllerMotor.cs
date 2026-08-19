@@ -23,7 +23,8 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Movement
             float deltaTime)
         {
             var localInputDirection = new Vector3(movementInput.x, 0f, movementInput.y);
-            var localMovementVelocity = localInputDirection * (_settings.MovementSpeed * movementMultiplier);
+            var movementSpeed = _settings.GetValidatedMovementSpeed();
+            var localMovementVelocity = localInputDirection * (movementSpeed * movementMultiplier);
             var worldMovementVelocity = _characterController.transform.TransformDirection(localMovementVelocity);
 
             worldMovementVelocity.y = verticalVelocity;
@@ -33,7 +34,8 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Movement
 
         public void Rotate(Vector2 lookInput, float deltaTime)
         {
-            var yAngle = lookInput.x * _settings.RotationSpeed * deltaTime;
+            var rotationSpeed = _settings.GetValidatedRotationSpeed();
+            var yAngle = lookInput.x * rotationSpeed * deltaTime;
             _characterController.transform.Rotate(Vector3.up, yAngle, Space.World);
         }
     }

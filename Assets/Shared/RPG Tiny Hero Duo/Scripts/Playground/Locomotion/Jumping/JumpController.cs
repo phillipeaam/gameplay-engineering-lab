@@ -96,7 +96,9 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Jumping
 
         private void ApplyJumpVelocity()
         {
-            VerticalVelocity = Mathf.Sqrt(_settings.JumpHeight * -2f * Physics.gravity.y);
+            var jumpHeight = _settings.GetValidatedJumpHeight();
+
+            VerticalVelocity = Mathf.Sqrt(jumpHeight * -2f * Physics.gravity.y);
         }
 
         public void CancelJumpRequest()
