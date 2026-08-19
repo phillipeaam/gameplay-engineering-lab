@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Tests.PlayMode
 {
@@ -75,6 +76,52 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Tests.PlayMode
                     configuration));
 
             Assert.That(exception.Message, Does.Contain(nameof(Input.Jump)));
+        }
+
+        /// <summary>
+        /// Verifies that the public tick boundary rejects time values that could reverse
+        /// simulation progress or propagate non-finite values into movement physics.
+        /// </summary>
+        [TestCase(-0.1f)]
+        [TestCase(float.NaN)]
+        [TestCase(float.PositiveInfinity)]
+        public void Tick_WithInvalidDeltaTime_IdentifiesInvalidParameter(float invalidDeltaTime)
+        {
+            CreateLocomotion(out _);
+
+            var exception = Assert.Throws<System.ArgumentOutOfRangeException>(
+                () => Locomotion.Tick(invalidDeltaTime));
+
+            Assert.That(exception.ParamName, Is.EqualTo("deltaTime"));
+        }
+
+        /// <summary>
+        /// Verifies that an invalid gravity result is rejected before jump state is stored
+        /// or the jump animation is requested.
+        /// </summary>
+        [Test]
+        public void Tick_WhenGravityProducesInvalidJumpVelocity_RejectsBeforeAnimation()
+        {
+            var gamepad = InputSystem.AddDevice<Gamepad>();
+            var originalGravity = Physics.gravity;
+            CreateLocomotion(out var animator);
+            Locomotion.Enable();
+
+            try
+            {
+                Physics.gravity = Vector3.up;
+                Press(gamepad.buttonSouth);
+
+                var exception = Assert.Throws<System.InvalidOperationException>(
+                    () => Locomotion.Tick(0f));
+
+                Assert.That(exception.Message, Does.Contain("non-finite jump velocity"));
+                Assert.That(animator.JumpRequestCount, Is.Zero);
+            }
+            finally
+            {
+                Physics.gravity = originalGravity;
+            }
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Extensions;
 using UnityEngine;
 
@@ -29,13 +30,33 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Movement
 
             worldMovementVelocity.y = verticalVelocity;
 
-            return _characterController.Move(worldMovementVelocity * deltaTime);
+            var displacement = worldMovementVelocity * deltaTime;
+
+            if (!displacement.IsFinite())
+            {
+                throw new InvalidOperationException(
+                    $"{nameof(CharacterControllerMotor)} produced a non-finite displacement. " +
+                    $"Movement input: {movementInput}, vertical velocity: {verticalVelocity}, " +
+                    $"movement multiplier: {movementMultiplier}, delta time: {deltaTime}, " +
+                    $"displacement: {displacement}.");
+            }
+
+            return _characterController.Move(displacement);
         }
 
         public void Rotate(Vector2 lookInput, float deltaTime)
         {
             var rotationSpeed = _settings.GetValidatedRotationSpeed();
             var yAngle = lookInput.x * rotationSpeed * deltaTime;
+
+            if (!yAngle.IsFinite())
+            {
+                throw new InvalidOperationException(
+                    $"{nameof(CharacterControllerMotor)} produced a non-finite rotation angle. " +
+                    $"Look input: {lookInput}, rotation speed: {rotationSpeed}, " +
+                    $"delta time: {deltaTime}, y angle: {yAngle}.");
+            }
+
             _characterController.transform.Rotate(Vector3.up, yAngle, Space.World);
         }
     }

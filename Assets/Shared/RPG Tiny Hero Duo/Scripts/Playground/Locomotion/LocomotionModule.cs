@@ -1,5 +1,6 @@
 using System;
 using Shared.RPG_Tiny_Hero_Duo.Scripts.Locomotion;
+using Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Extensions;
 using Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Input;
 using Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Jumping;
 using Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Landing;
@@ -34,11 +35,6 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion
         {
             _movementAnimator = movementAnimator
                 ?? throw new ArgumentNullException(nameof(movementAnimator));
-
-            if (jumpAnimator == null)
-            {
-                throw new ArgumentNullException(nameof(jumpAnimator));
-            }
 
             _inputEvents = new LocomotionInputEvents(locomotionInput);
             _movementMotor = new CharacterControllerMotor(characterController, movementSettings);
@@ -98,6 +94,10 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion
 
         public void Tick(float deltaTime)
         {
+            deltaTime.RequireNonNegativeFinite(
+                nameof(deltaTime),
+                nameof(LocomotionModule));
+
             _landingRecovery.Tick(deltaTime);
 
             _jumpController.UpdateVerticalVelocity(_movementMotor.IsGrounded, deltaTime);

@@ -1,5 +1,6 @@
 using System;
 using Shared.RPG_Tiny_Hero_Duo.Scripts.Locomotion;
+using Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Extensions;
 using Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Grounding;
 using UnityEngine;
 
@@ -97,8 +98,23 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Jumping
         private void ApplyJumpVelocity()
         {
             var jumpHeight = _settings.GetValidatedJumpHeight();
+            var gravity = Physics.gravity.y;
 
-            VerticalVelocity = Mathf.Sqrt(jumpHeight * -2f * Physics.gravity.y);
+            // The formula comes from the constant-acceleration motion equation:
+            // finalSpeed² = initialSpeed² + 2 × acceleration × distance.
+            // At the jump apex, finalSpeed is zero, so:
+            // initialSpeed = squareRoot(jumpHeight × -2 × gravity).
+            var jumpVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+
+            if (!jumpVelocity.IsFinite())
+            {
+                throw new InvalidOperationException(
+                    $"{nameof(JumpController)} produced a non-finite jump velocity. " +
+                    $"Jump height: {jumpHeight}, gravity: {gravity}, " +
+                    $"jump velocity: {jumpVelocity}.");
+            }
+
+            VerticalVelocity = jumpVelocity;
         }
 
         public void CancelJumpRequest()
