@@ -12,13 +12,12 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion
 {
     public sealed class LocomotionModule : IAnimationModule
     {
-        private readonly ILandingSettings _landingSettings;
         private readonly IMovementAnimator _movementAnimator;
-        private readonly LocomotionInputEvents _input;
-        private readonly CharacterControllerMotor _motor;
-        private readonly LandingRecovery _landingRecovery = new();
-        private readonly GroundedStateTracker _groundedState = new();
-        private readonly JumpController _jump;
+        private readonly LocomotionInputEvents _inputEvents;
+        private readonly CharacterControllerMotor _movementMotor;
+        private readonly LandingRecovery _landingRecovery;
+        private readonly GroundedStateTracker _groundedStateTracker = new();
+        private readonly JumpController _jumpController;
 
         private Vector2 _movementInput;
         private Vector2 _lookInput;
@@ -38,7 +37,8 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion
                 throw new ArgumentNullException(nameof(characterController));
             }
 
-            _movementAnimator = movementAnimator ?? throw new ArgumentNullException(nameof(movementAnimator));
+            _movementAnimator = movementAnimator
+                ?? throw new ArgumentNullException(nameof(movementAnimator));
 
             if (jumpAnimator == null)
             {
@@ -59,11 +59,11 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion
             {
                 throw new ArgumentNullException(nameof(jumpSettings));
             }
-            _landingSettings = landingSettings ?? throw new ArgumentNullException(nameof(landingSettings));
 
-            _input = new LocomotionInputEvents(locomotionInput);
-            _motor = new CharacterControllerMotor(characterController, movementSettings);
-            _jump = new JumpController(jumpSettings, jumpAnimator, _landingRecovery);
+            _inputEvents = new LocomotionInputEvents(locomotionInput);
+            _movementMotor = new CharacterControllerMotor(characterController, movementSettings);
+            _landingRecovery = new LandingRecovery(landingSettings);
+            _jumpController = new JumpController(jumpSettings, jumpAnimator);
         }
 
         public void Enable()
@@ -73,10 +73,10 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion
                 return;
             }
 
-            _input.MovementChanged += OnMovementChanged;
-            _input.JumpRequested += OnJumpRequested;
-            _input.LookChanged += OnLookChanged;
-            _input.Enable();
+            _inputEvents.MovementChanged += OnMovementChanged;
+            _inputEvents.JumpRequested += OnJumpRequested;
+            _inputEvents.LookChanged += OnLookChanged;
+            _inputEvents.Enable();
 
             _isEnabled = true;
         }
@@ -88,10 +88,10 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion
                 return;
             }
 
-            _input.MovementChanged -= OnMovementChanged;
-            _input.JumpRequested -= OnJumpRequested;
-            _input.LookChanged -= OnLookChanged;
-            _input.Disable();
+            _inputEvents.MovementChanged -= OnMovementChanged;
+            _inputEvents.JumpRequested -= OnJumpRequested;
+            _inputEvents.LookChanged -= OnLookChanged;
+            _inputEvents.Disable();
 
             _isEnabled = false;
 
@@ -108,7 +108,7 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion
 
         private void OnJumpRequested()
         {
-            _jump.RequestJump();
+            _jumpController.RequestJump();
         }
 
         private void OnLookChanged(Vector2 look)
@@ -120,33 +120,35 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion
         {
             _landingRecovery.Tick(deltaTime);
 
-            _jump.UpdateVerticalVelocity(_motor.IsGrounded, deltaTime);
+            _jumpController.UpdateVerticalVelocity(_movementMotor.IsGrounded, deltaTime);
 
-            var movementMultiplier = _landingRecovery.GetMovementMultiplier(_landingSettings);
+            var movementMultiplier = _landingRecovery.GetMovementMultiplier();
 
-            var collisionFlags = _motor.Move(
+            var collisionFlags = _movementMotor.Move(
                 _movementInput,
-                _jump.VerticalVelocity,
+                _jumpController.VerticalVelocity,
                 movementMultiplier,
                 deltaTime);
 
             var stateChange = UpdateGroundedState(collisionFlags);
 
-            _jump.ProcessRequest(stateChange.IsGrounded);
+            _jumpController.ProcessRequest(
+                stateChange.IsGrounded,
+                isJumpBlocked: _landingRecovery.IsActive);
 
-            _motor.Rotate(_lookInput, deltaTime);
+            _movementMotor.Rotate(_lookInput, deltaTime);
         }
 
         private GroundedStateChange UpdateGroundedState(CollisionFlags collisionFlags)
         {
-            var stateChange = _groundedState.Update(collisionFlags);
+            var stateChange = _groundedStateTracker.Update(collisionFlags);
 
             if (stateChange.HasLanded)
             {
-                _landingRecovery.Start(_landingSettings.LandingDuration);
+                _landingRecovery.Start();
             }
 
-            _jump.UpdateGroundedState(stateChange);
+            _jumpController.UpdateGroundedState(stateChange);
 
             if (stateChange.HasChanged)
             {
@@ -158,7 +160,7 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion
 
         private void CancelJumpRequest()
         {
-            _jump.CancelJumpRequest();
+            _jumpController.CancelJumpRequest();
         }
     }
 }

@@ -1,6 +1,6 @@
+using System;
 using Shared.RPG_Tiny_Hero_Duo.Scripts.Locomotion;
 using Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Grounding;
-using Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Landing;
 using UnityEngine;
 
 namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Jumping
@@ -11,7 +11,6 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Jumping
 
         private readonly IJumpSettings _settings;
         private readonly IJumpAnimator _jumpAnimator;
-        private readonly LandingRecovery _landingRecovery;
 
         private bool _hasDoubleJumpAvailable;
         private bool _jumpRequested;
@@ -20,12 +19,14 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Jumping
 
         public JumpController(
             IJumpSettings jumpSettings,
-            IJumpAnimator jumpAnimator,
-            LandingRecovery landingRecovery)
+            IJumpAnimator jumpAnimator)
         {
-            _settings = jumpSettings;
-            _jumpAnimator = jumpAnimator;
-            _landingRecovery = landingRecovery;
+            _settings = jumpSettings
+                ?? throw new ArgumentNullException(nameof(jumpSettings));
+
+            _jumpAnimator = jumpAnimator
+                ?? throw new ArgumentNullException(nameof(jumpAnimator));
+
             _hasDoubleJumpAvailable = jumpSettings.CanDoubleJump;
         }
 
@@ -65,7 +66,7 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Jumping
             }
         }
 
-        public void ProcessRequest(bool isGrounded)
+        public void ProcessRequest(bool isGrounded, bool isJumpBlocked)
         {
             if (!_jumpRequested)
             {
@@ -74,7 +75,7 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Jumping
 
             _jumpRequested = false;
 
-            if (_landingRecovery.TimeRemaining > 0f)
+            if (isJumpBlocked)
             {
                 return;
             }
@@ -96,10 +97,6 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Jumping
 
         private void ApplyJumpVelocity()
         {
-            // The formula comes from the constant-acceleration motion equation:
-            // finalSpeed² = initialSpeed² + 2 × acceleration × distance.
-            // At the jump apex, finalSpeed is zero, so:
-            // initialSpeed = squareRoot(jumpHeight × -2 × gravity).
             VerticalVelocity = Mathf.Sqrt(_settings.JumpHeight * -2f * Physics.gravity.y);
         }
 
