@@ -24,6 +24,12 @@
   and presentation rather than contain all domain policy.
 - Composition roots MAY depend on concrete implementations. Core rules SHOULD
   depend on narrow contracts only where substitution or isolation is valuable.
+- Contracts SHOULD expose only the capabilities required by each consumer.
+  Composition convenience alone does not justify making every consumer depend
+  on an aggregated interface.
+- Sibling subsystems SHOULD exchange the smallest state or decision required
+  through their orchestrator instead of depending on each other's concrete
+  implementation or owned state.
 - Dependencies MUST point toward the more stable policy. Avoid cycles between
   modules or assemblies.
 - Hidden global mutable state and service locators MUST NOT be used in core
@@ -48,6 +54,9 @@
   contract specifically requires them and the trade-off is documented.
 - Validate inputs at public/protected boundaries and constructors. Do not repeat
   the same check through private layers after an invariant is established.
+- When a dependency deliberately exposes mutable configuration, constructor
+  validation does not establish a permanent invariant. Consumers MUST either
+  snapshot the values they own or revalidate them at the point of use.
 - Changes to public contracts, serialized fields, save data, scene bindings, or
   package-facing APIs MUST consider compatibility and migration.
 - Breaking changes MUST be explicit, isolated, and accompanied by migration or
@@ -81,6 +90,9 @@
   translate it at a boundary. Never silently swallow failures.
 - Error messages MUST identify the failed operation or field sufficiently for
   diagnosis without exposing secrets.
+- Values produced by numeric calculations MUST be validated before a
+  risk-sensitive external effect when valid inputs can still produce an invalid
+  result through overflow, non-finite state, or an unsupported combination.
 - Use assertions for developer invariants, not for recoverable player input.
 - Do not use finalizers in Unity runtime code.
 

@@ -29,6 +29,10 @@
   external mutation is not part of the runtime contract.
 - Validate the complete serialized configuration at a suitable composition or
   lifecycle boundary and identify the invalid field.
+- Serialized numeric configuration used by gameplay calculations MUST validate
+  finitude and its domain-specific range at runtime. Inspector constraints such
+  as `[Min]` and `[Range]` improve authoring feedback but are not runtime
+  guarantees.
 - Use Unity's overloaded `== null` semantics when checking whether a
   `UnityEngine.Object` is usable. Use `ReferenceEquals` only for deliberate CLR
   reference identity checks.
@@ -58,6 +62,9 @@
   intentionally frame-count based.
 - Physics state changes SHOULD occur through Unity's supported physics timing
   and APIs.
+- Calculated vectors, velocities, rotations, and time values MUST be finite and
+  within their required domain before they are passed to physics, transform, or
+  animation APIs that cannot safely recover from invalid numeric state.
 - Avoid repeated scene searches, component lookups, string-based dispatch, and
   avoidable allocation inside demonstrated hot paths.
 

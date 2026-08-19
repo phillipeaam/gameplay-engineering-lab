@@ -22,6 +22,13 @@
 - Main success behavior is tested at the lowest practical level.
 - Relevant invalid input, boundary, timing, cancellation, and lifecycle paths are
   covered or their omission is justified.
+- Serialized or externally supplied numeric inputs have explicit runtime
+  validation for finitude and domain-specific ranges when invalid values could
+  reach gameplay calculations.
+- Mutable configuration is snapshotted, revalidated at consumption, or
+  explicitly documented and enforced as immutable.
+- Calculated values are validated before risk-sensitive Unity APIs when valid
+  inputs alone do not guarantee a safe result.
 - Responsibilities, state ownership, and dependencies are understandable.
 - Player-facing behavior receives a representative PlayMode or manual gameplay
   check when pure tests cannot prove it.
