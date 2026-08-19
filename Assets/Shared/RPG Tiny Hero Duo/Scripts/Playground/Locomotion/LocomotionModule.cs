@@ -13,7 +13,7 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion
     public sealed class LocomotionModule : IAnimationModule
     {
         private readonly ILandingSettings _landingSettings;
-        private readonly ILocomotionAnimator _animator;
+        private readonly IMovementAnimator _movementAnimator;
         private readonly LocomotionInputEvents _input;
         private readonly CharacterControllerMotor _motor;
         private readonly LandingRecovery _landingRecovery = new();
@@ -26,9 +26,11 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion
 
         public LocomotionModule(
             CharacterController characterController,
-            ILocomotionAnimator animator,
-            ILocomotionInput input,
-            ILocomotionConfiguration configuration,
+            IMovementAnimator movementAnimator,
+            IJumpAnimator jumpAnimator,
+            ILocomotionInput locomotionInput,
+            IMovementSettings movementSettings,
+            IJumpSettings jumpSettings,
             ILandingSettings landingSettings)
         {
             if (characterController == null)
@@ -36,22 +38,32 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion
                 throw new ArgumentNullException(nameof(characterController));
             }
 
-            _animator = animator ?? throw new ArgumentNullException(nameof(animator));
+            _movementAnimator = movementAnimator ?? throw new ArgumentNullException(nameof(movementAnimator));
 
-            if (input == null)
+            if (jumpAnimator == null)
             {
-                throw new ArgumentNullException(nameof(input));
+                throw new ArgumentNullException(nameof(jumpAnimator));
             }
 
-            if (configuration == null)
+            if (locomotionInput == null)
             {
-                throw new ArgumentNullException(nameof(configuration));
+                throw new ArgumentNullException(nameof(locomotionInput));
+            }
+
+            if (movementSettings == null)
+            {
+                throw new ArgumentNullException(nameof(movementSettings));
+            }
+
+            if (jumpSettings == null)
+            {
+                throw new ArgumentNullException(nameof(jumpSettings));
             }
             _landingSettings = landingSettings ?? throw new ArgumentNullException(nameof(landingSettings));
 
-            _input = new LocomotionInputEvents(input);
-            _motor = new CharacterControllerMotor(characterController, configuration);
-            _jump = new JumpController(configuration, animator, _landingRecovery);
+            _input = new LocomotionInputEvents(locomotionInput);
+            _motor = new CharacterControllerMotor(characterController, movementSettings);
+            _jump = new JumpController(jumpSettings, jumpAnimator, _landingRecovery);
         }
 
         public void Enable()
@@ -91,7 +103,7 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion
         private void OnMovementChanged(Vector2 movement)
         {
             _movementInput = movement;
-            _animator.ApplyMovement(movement);
+            _movementAnimator.ApplyMovement(movement);
         }
 
         private void OnJumpRequested()
@@ -138,7 +150,7 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion
 
             if (stateChange.HasChanged)
             {
-                _animator.SetGrounded(stateChange.IsGrounded);
+                _movementAnimator.SetGrounded(stateChange.IsGrounded);
             }
 
             return stateChange;

@@ -11,7 +11,8 @@ It does not define movement rules or how state changes are produced.
 
 ```text
 Locomotion/
-├── ILocomotionAnimator.cs
+├── IJumpAnimator.cs
+├── IMovementAnimator.cs
 ├── LocomotionAnimatorAdapter.cs
 ├── RPGTinyHeroDuo.Locomotion.asmdef
 └── README.md
@@ -28,7 +29,7 @@ JumpRequest : Trigger
 
 ## Contract
 
-`ILocomotionAnimator` exposes the visual operations:
+`IMovementAnimator` and `IJumpAnimator` expose the visual operations:
 
 ```text
 ApplyMovement(Vector2)  → MoveX and MoveY

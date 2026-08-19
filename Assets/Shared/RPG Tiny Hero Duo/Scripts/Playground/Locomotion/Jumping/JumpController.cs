@@ -9,8 +9,8 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Jumping
     {
         private const float GroundedVerticalVelocity = -2f;
 
-        private readonly ILocomotionConfiguration _configuration;
-        private readonly ILocomotionAnimator _animator;
+        private readonly IJumpSettings _settings;
+        private readonly IJumpAnimator _jumpAnimator;
         private readonly LandingRecovery _landingRecovery;
 
         private bool _hasDoubleJumpAvailable;
@@ -19,14 +19,14 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Jumping
         public float VerticalVelocity { get; private set; }
 
         public JumpController(
-            ILocomotionConfiguration configuration,
-            ILocomotionAnimator animator,
+            IJumpSettings jumpSettings,
+            IJumpAnimator jumpAnimator,
             LandingRecovery landingRecovery)
         {
-            _configuration = configuration;
-            _animator = animator;
+            _settings = jumpSettings;
+            _jumpAnimator = jumpAnimator;
             _landingRecovery = landingRecovery;
-            _hasDoubleJumpAvailable = configuration.CanDoubleJump;
+            _hasDoubleJumpAvailable = jumpSettings.CanDoubleJump;
         }
 
         public void RequestJump()
@@ -59,9 +59,9 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Jumping
 
             // Touching the ground starts a new jump sequence, so the double jump becomes
             // available again. The setting is read here so runtime changes are respected.
-            if (stateChange.HasChanged || _hasDoubleJumpAvailable != _configuration.CanDoubleJump)
+            if (stateChange.HasChanged || _hasDoubleJumpAvailable != _settings.CanDoubleJump)
             {
-                _hasDoubleJumpAvailable = _configuration.CanDoubleJump;
+                _hasDoubleJumpAvailable = _settings.CanDoubleJump;
             }
         }
 
@@ -82,15 +82,15 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Jumping
             if (isGrounded)
             {
                 ApplyJumpVelocity();
-                _animator.RequestJump();
+                _jumpAnimator.RequestJump();
                 return;
             }
 
-            if (_configuration.CanDoubleJump && _hasDoubleJumpAvailable)
+            if (_settings.CanDoubleJump && _hasDoubleJumpAvailable)
             {
                 _hasDoubleJumpAvailable = false;
                 ApplyJumpVelocity();
-                _animator.RequestJump();
+                _jumpAnimator.RequestJump();
             }
         }
 
@@ -100,7 +100,7 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Jumping
             // finalSpeed² = initialSpeed² + 2 × acceleration × distance.
             // At the jump apex, finalSpeed is zero, so:
             // initialSpeed = squareRoot(jumpHeight × -2 × gravity).
-            VerticalVelocity = Mathf.Sqrt(_configuration.JumpHeight * -2f * Physics.gravity.y);
+            VerticalVelocity = Mathf.Sqrt(_settings.JumpHeight * -2f * Physics.gravity.y);
         }
 
         public void CancelJumpRequest()

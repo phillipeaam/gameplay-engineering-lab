@@ -25,9 +25,13 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground
             
             var animator = GetComponent<Animator>();
 
+            var locomotionAnimator = new LocomotionAnimatorAdapter(animator);
+
             _locomotion = new LocomotionModule(
                 characterController,
-                new LocomotionAnimatorAdapter(animator),
+                locomotionAnimator,
+                locomotionAnimator,
+                _locomotionInput,
                 _locomotionInput,
                 _locomotionInput,
                 _locomotionInput);

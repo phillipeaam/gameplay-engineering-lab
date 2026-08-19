@@ -3,6 +3,8 @@ using Shared.RPG_Tiny_Hero_Duo.Scripts.Locomotion;
 using Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion;
 using Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Input;
 using Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Landing;
+using Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Jumping;
+using Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Movement;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -89,7 +91,9 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Tests.PlayMode
             _locomotion = new LocomotionModule(
                 characterController,
                 animator,
+                animator,
                 _input,
+                configuration,
                 configuration,
                 configuration);
         }
@@ -115,7 +119,7 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Tests.PlayMode
             }
         }
 
-        private sealed class TestLocomotionConfiguration : ILocomotionConfiguration, ILandingSettings
+        private sealed class TestLocomotionConfiguration : IMovementSettings, IJumpSettings, ILandingSettings
         {
             public float MovementSpeed => 5f;
             public float RotationSpeed => 250f;
@@ -125,7 +129,7 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Tests.PlayMode
             public float LandingMovementMultiplier => 0.2f;
         }
 
-        private sealed class RecordingLocomotionAnimator : ILocomotionAnimator
+        private sealed class RecordingLocomotionAnimator : IMovementAnimator, IJumpAnimator
         {
             public Vector2 LastMovement { get; private set; }
             public int JumpRequestCount { get; private set; }
