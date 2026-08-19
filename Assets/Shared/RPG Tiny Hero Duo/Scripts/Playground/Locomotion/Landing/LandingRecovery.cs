@@ -28,10 +28,8 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Landing
 
         public void Start()
         {
-            _settings.RequireValid();
-
-            _duration = _settings.LandingDuration;
-            _initialMovementMultiplier = _settings.LandingMovementMultiplier;
+            _duration = _settings.GetValidatedLandingDuration();
+            _initialMovementMultiplier = _settings.GetValidatedLandingMovementMultiplier();
 
             _timeRemaining = _duration;
         }

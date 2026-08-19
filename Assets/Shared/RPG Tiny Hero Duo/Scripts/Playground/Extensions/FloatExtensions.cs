@@ -42,5 +42,17 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Extensions
 
             return value;
         }
+
+        public static float RequireNormalizedFinite(
+            this float value,
+            string fieldName,
+            string ownerTypeName)
+        {
+            return value.RequireFiniteRange(
+                0f,
+                1f,
+                fieldName,
+                ownerTypeName);
+        }
     }
 }

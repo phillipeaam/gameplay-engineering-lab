@@ -79,9 +79,7 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion
             nameof(_landingDuration),
             nameof(LocomotionInputReferences));
 
-        public float LandingMovementMultiplier => _landingMovementMultiplier.RequireFiniteRange(
-            0f,
-            1f,
+        public float LandingMovementMultiplier => _landingMovementMultiplier.RequireNormalizedFinite(
             nameof(_landingMovementMultiplier),
             nameof(LocomotionInputReferences));
     }
