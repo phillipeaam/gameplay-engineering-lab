@@ -13,7 +13,8 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Movement
 
         public CharacterControllerMotor(CharacterController characterController, IMovementSettings settings)
         {
-            _characterController = characterController.RequireValid();
+            _characterController = characterController
+                ?? throw new ArgumentNullException(nameof(characterController));
             _settings = settings.RequireValid();
         }
 
