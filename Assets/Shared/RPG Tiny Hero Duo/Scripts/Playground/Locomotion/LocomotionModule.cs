@@ -32,22 +32,12 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion
             IJumpSettings jumpSettings,
             ILandingSettings landingSettings)
         {
-            if (characterController == null)
-            {
-                throw new ArgumentNullException(nameof(characterController));
-            }
-
             _movementAnimator = movementAnimator
                 ?? throw new ArgumentNullException(nameof(movementAnimator));
 
             if (jumpAnimator == null)
             {
                 throw new ArgumentNullException(nameof(jumpAnimator));
-            }
-
-            if (locomotionInput == null)
-            {
-                throw new ArgumentNullException(nameof(locomotionInput));
             }
 
             if (movementSettings == null)
