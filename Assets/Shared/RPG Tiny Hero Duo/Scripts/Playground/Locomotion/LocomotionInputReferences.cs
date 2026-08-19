@@ -26,18 +26,22 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion
         [SerializeField] private InputActionReference _jump;
 
         [Tooltip("Maximum horizontal movement speed in units per second.")]
+        [Min(0f)]
         [SerializeField] private float _movementSpeed = 5f;
 
         [Tooltip("Character rotation speed in degrees per second.")]
+        [Min(0f)]
         [SerializeField] private float _rotationSpeed = 250f;
 
         [Tooltip("Maximum vertical height reached by a jump, in world units.")]
+        [Min(0f)]
         [SerializeField] private float _jumpHeight = 1.5f;
 
         [Tooltip("Allows the character to perform one additional jump while airborne.")]
         [SerializeField] private bool _canDoubleJump = true;
 
         [Tooltip("How long jumping remains locked after landing, in seconds.")]
+        [Min(0f)]
         [SerializeField] private float _landingDuration = 0.4f;
 
         [Range(0f, 1f)]
@@ -57,11 +61,28 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion
             nameof(_jump),
             nameof(LocomotionInputReferences));
 
-        public float MovementSpeed => _movementSpeed;
-        public float RotationSpeed => _rotationSpeed;
-        public float JumpHeight => _jumpHeight;
+        public float MovementSpeed => _movementSpeed.RequireNonNegativeFinite(
+            nameof(_movementSpeed),
+            nameof(LocomotionInputReferences));
+
+        public float RotationSpeed => _rotationSpeed.RequireNonNegativeFinite(
+            nameof(_rotationSpeed),
+            nameof(LocomotionInputReferences));
+
+        public float JumpHeight => _jumpHeight.RequireNonNegativeFinite(
+            nameof(_jumpHeight),
+            nameof(LocomotionInputReferences));
+
         public bool CanDoubleJump => _canDoubleJump;
-        public float LandingDuration => _landingDuration;
-        public float LandingMovementMultiplier => _landingMovementMultiplier;
+
+        public float LandingDuration => _landingDuration.RequireNonNegativeFinite(
+            nameof(_landingDuration),
+            nameof(LocomotionInputReferences));
+
+        public float LandingMovementMultiplier => _landingMovementMultiplier.RequireFiniteRange(
+            0f,
+            1f,
+            nameof(_landingMovementMultiplier),
+            nameof(LocomotionInputReferences));
     }
 }

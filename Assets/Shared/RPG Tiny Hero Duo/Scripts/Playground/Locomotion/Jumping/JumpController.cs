@@ -21,8 +21,7 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Jumping
             IJumpSettings jumpSettings,
             IJumpAnimator jumpAnimator)
         {
-            _settings = jumpSettings
-                ?? throw new ArgumentNullException(nameof(jumpSettings));
+            _settings = jumpSettings.RequireValid();
 
             _jumpAnimator = jumpAnimator
                 ?? throw new ArgumentNullException(nameof(jumpAnimator));

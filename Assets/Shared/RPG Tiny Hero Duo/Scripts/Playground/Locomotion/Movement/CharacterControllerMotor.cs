@@ -13,7 +13,7 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Movement
         public CharacterControllerMotor(CharacterController characterController, IMovementSettings settings)
         {
             _characterController = characterController.RequireValid();
-            _settings = settings;
+            _settings = settings.RequireValid();
         }
 
         public CollisionFlags Move(

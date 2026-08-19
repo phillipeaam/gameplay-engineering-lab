@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Landing
@@ -16,7 +15,7 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Landing
 
         public LandingRecovery(ILandingSettings settings)
         {
-            _settings = settings ?? throw new ArgumentNullException(nameof(settings));
+            _settings = settings.RequireValid();
         }
 
         public void Tick(float deltaTime)
