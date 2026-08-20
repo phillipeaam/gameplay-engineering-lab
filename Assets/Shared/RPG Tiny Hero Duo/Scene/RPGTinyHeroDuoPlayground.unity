@@ -1570,12 +1570,6 @@ MonoBehaviour:
     _canDoubleJump: 1
     _landingDuration: 0.4
     _landingMovementMultiplier: 0.2
-  _fullBodyActionsInput:
-    _fall: {fileID: 1120369429361536294, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-    _stun: {fileID: 1120369429361536294, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-    _hitReaction: {fileID: 1120369429361536294, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-    _death: {fileID: 1120369429361536294, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-    _loop: {fileID: 1120369429361536294, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!4 &203037880 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2607418519476274078, guid: dc06bfdcf78884fa7a6ac4ad24ab51d1, type: 3}
@@ -10724,12 +10718,6 @@ MonoBehaviour:
     _canDoubleJump: 1
     _landingDuration: 0.4
     _landingMovementMultiplier: 0.2
-  _fullBodyActionsInput:
-    _fall: {fileID: 1120369429361536294, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-    _stun: {fileID: 1120369429361536294, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-    _hitReaction: {fileID: 1120369429361536294, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-    _death: {fileID: 1120369429361536294, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-    _loop: {fileID: 1120369429361536294, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!143 &1668056191
 CharacterController:
   m_ObjectHideFlags: 0
