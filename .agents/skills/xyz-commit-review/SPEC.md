@@ -180,6 +180,9 @@ Changes:
 
 Describe evidence that the change works.
 
+Apply the shared collection contract in
+`../validation-evidence/SKILL.md` before finalizing this section.
+
 Possible evidence:
 
 - unit tests;
