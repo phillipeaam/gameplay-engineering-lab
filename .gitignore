@@ -47,6 +47,9 @@
 # Visual Studio cache directory
 .vs/
 
+# Python virtual environment
+/.venv/
+
 # Gradle cache directory
 .gradle/
 
