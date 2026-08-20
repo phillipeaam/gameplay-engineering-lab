@@ -1,5 +1,10 @@
 # Performance and Memory Standard
 
+For allocation-specific review, read
+[allocation-analysis.md](allocation-analysis.md) in addition to this module.
+It defines the static heuristics, execution-path classification, evidence
+protocol, and graduated finding severity for managed allocations and GC pressure.
+
 - Do not claim a performance improvement without comparative measurements.
 - Define the target platform, representative scenario, metric, and budget before
   treating optimization as complete.

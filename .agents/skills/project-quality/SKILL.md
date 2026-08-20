@@ -23,6 +23,9 @@ modules only for a project-wide audit or broad evolution of the standard.
   [testing-and-reliability.md](references/testing-and-reliability.md).
 - Optimization, profiling, allocation, jobs, Burst, or hot paths: read
   [performance.md](references/performance.md).
+- Allocation-free review, GC pressure, pooling, boxing, closures, temporary
+  collections, or allocation budgets: also read
+  [allocation-analysis.md](references/allocation-analysis.md).
 - Repository boundaries, packages, build settings, documentation, or delivery:
   read [organization-and-delivery.md](references/organization-and-delivery.md).
 - Acceptance evidence and gates: always read the applicable sections of
@@ -36,6 +39,8 @@ Examples:
   when ownership or vendor boundaries are involved.
 - Review performance work: performance and change gates, plus the modules for
   the affected implementation.
+- Review allocation-sensitive code: performance, allocation analysis, change
+  gates, and the modules for the affected implementation.
 
 ## Operating modes
 
