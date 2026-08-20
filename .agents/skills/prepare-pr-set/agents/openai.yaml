@@ -1,0 +1,4 @@
+interface:
+  display_name: "Prepare PR Set"
+  short_description: "Split changes into direct or stacked PRs"
+  default_prompt: "Use $prepare-pr-set to split my local changes, publish the branches, and create small validated direct or stacked draft PRs."
