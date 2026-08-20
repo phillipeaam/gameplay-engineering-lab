@@ -121,6 +121,7 @@ project-wide audit or broad evolution of the quality standard.
 | `MonoBehaviour`, serialization, frame/physics behavior, scenes, prefabs or Unity assets | `references/unity-lifecycle-and-assets.md` |
 | Tests, persistence, diagnostics, reproducibility or failure handling | `references/testing-and-reliability.md` |
 | Optimization, allocation, profiling, jobs, Burst or hot paths | `references/performance.md` |
+| Allocation-free review, GC pressure, pooling, boxing, closures or temporary collections | `references/allocation-analysis.md` |
 | Repository boundaries, packages, build settings, documentation or delivery | `references/organization-and-delivery.md` |
 | Acceptance evidence and gates for the classified change type | `references/change-gates.md` |
 
@@ -148,13 +149,16 @@ failure, or when tooling makes a previously manual gate enforceable.
 
 ## 7. Authoritative references
 
-Verified 2026-08-17:
+Verified 2026-08-20:
 
 - [ISO/IEC 25010:2023 product quality model](https://www.iso.org/standard/78176.html)
-- [Unity 6 assembly definitions](https://docs.unity3d.com/6000.0/Documentation/Manual/assembly-definitions-intro.html)
-- [Unity 6 script serialization](https://docs.unity3d.com/6000.0/Documentation/Manual/script-serialization.html)
-- [Unity Test Framework](https://docs.unity3d.com/6000.0/Documentation/Manual/com.unity.test-framework.html)
-- [Unity profiling on a target platform](https://docs.unity3d.com/6000.0/Documentation/Manual/profiling-target-device.html)
+- [Unity 6.3 assembly definitions](https://docs.unity3d.com/6000.3/Documentation/Manual/assembly-definitions-intro.html)
+- [Unity 6.3 script serialization](https://docs.unity3d.com/6000.3/Documentation/Manual/script-serialization.html)
+- [Unity 6.3 Test Framework](https://docs.unity3d.com/6000.3/Documentation/Manual/com.unity.test-framework.html)
+- [Unity 6.3 profiling on a target platform](https://docs.unity3d.com/6000.3/Documentation/Manual/profiling-target-device.html)
+- [Unity 6.3 optimizing code for managed memory](https://docs.unity3d.com/6000.3/Documentation/Manual/performance-optimizing-code-managed-memory.html)
+- [Unity 6.3 tracking garbage collection allocations](https://docs.unity3d.com/6000.3/Documentation/Manual/performance-track-garbage-collection.html)
+- [Microsoft C# performance guidance](https://learn.microsoft.com/en-us/dotnet/csharp/advanced-topics/performance/)
 - [Microsoft C# coding conventions](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions)
 - [Microsoft unit testing best practices](https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-best-practices)
 - [Google code review standard](https://google.github.io/eng-practices/review/reviewer/standard.html)
