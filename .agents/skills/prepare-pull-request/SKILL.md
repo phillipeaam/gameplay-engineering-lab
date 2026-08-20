@@ -15,6 +15,8 @@ validate, review, and reverse.
 2. Read [pull-request-standard.md](references/pull-request-standard.md) for the
    PR contract, metrics, Unity guidance, and industry references.
 3. Use `.github/pull_request_template.md` as the canonical body structure.
+4. Read `../validation-evidence/SKILL.md` before finalizing validation or
+   Game and Unity verification.
 
 Do not copy quality rules into the PR when they are irrelevant to its risk.
 
@@ -35,6 +37,7 @@ Do not copy quality rules into the PR when they are irrelevant to its risk.
    - `Passed` requires an observed successful command or check result.
    - `Manually verified` requires an observed or user-provided procedure.
    - Otherwise state `Not run` with the reason.
+   Apply the shared validation collection rule before using the not-run state.
 7. For gameplay, UI, animation, scene, prefab, shader, input, physics, or
    platform-sensitive changes, include the applicable Unity verification from
    the reference. Never demand irrelevant fields.
