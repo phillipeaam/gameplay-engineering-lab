@@ -69,6 +69,10 @@
 - Follow existing project naming: PascalCase for types, methods, properties,
   events, and constants; camelCase for parameters and locals; `_camelCase` for
   private fields.
+- Enum types MUST use a singular noun or noun phrase. Enums marked with
+  `[Flags]` MUST use a plural noun or noun phrase. Enum names MUST communicate
+  the represented concept, such as state, stage, result, or mode, rather than
+  merely identifying their implementation as an enum.
 - Prefer names that communicate domain intent rather than implementation type.
 - Use `var` when the right-hand side makes the type obvious. Use an explicit
   type when inference hides an important domain, API, numeric, or ownership
