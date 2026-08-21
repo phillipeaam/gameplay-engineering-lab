@@ -160,6 +160,7 @@ Verified 2026-08-20:
 - [Unity 6.3 tracking garbage collection allocations](https://docs.unity3d.com/6000.3/Documentation/Manual/performance-track-garbage-collection.html)
 - [Microsoft C# performance guidance](https://learn.microsoft.com/en-us/dotnet/csharp/advanced-topics/performance/)
 - [Microsoft C# coding conventions](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions)
+- [Microsoft .NET enum design guidelines](https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/enum)
 - [Microsoft unit testing best practices](https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-best-practices)
 - [Google code review standard](https://google.github.io/eng-practices/review/reviewer/standard.html)
 - [Google code review checklist](https://google.github.io/eng-practices/review/reviewer/looking-for.html)
