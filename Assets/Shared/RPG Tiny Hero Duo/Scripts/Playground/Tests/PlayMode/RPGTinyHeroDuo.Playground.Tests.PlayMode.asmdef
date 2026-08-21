@@ -15,6 +15,9 @@
     "precompiledReferences": [
         "nunit.framework.dll"
     ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
     "autoReferenced": false,
     "defineConstraints": [],
     "versionDefines": [],
