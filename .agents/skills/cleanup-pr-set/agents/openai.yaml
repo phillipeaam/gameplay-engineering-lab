@@ -1,0 +1,4 @@
+interface:
+  display_name: "Cleanup PR Set"
+  short_description: "Retire merged branches and worktrees safely"
+  default_prompt: "Use $cleanup-pr-set to remove merged local PR worktrees and branches, audit verification artifacts, and preserve the WIP snapshot until separately confirmed."
