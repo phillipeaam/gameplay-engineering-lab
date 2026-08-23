@@ -6,12 +6,12 @@ using Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Jumping;
 using Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Landing;
 using Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Movement;
 using Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion.Grounding;
-using Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Shared;
+using Shared.ModuleHosting;
 using UnityEngine;
 
 namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Locomotion
 {
-    public sealed class LocomotionModule : IAnimationModule
+    public sealed class LocomotionModule : ITickableModule
     {
         private readonly IMovementAnimator _movementAnimator;
         private readonly LocomotionInputEvents _inputEvents;

@@ -1,10 +1,10 @@
 using System;
 using Shared.RPG_Tiny_Hero_Duo.Scripts.FullBodyActions;
-using Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.Shared;
+using Shared.ModuleHosting;
 
 namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground.FullBodyActions
 {
-    public sealed class FullBodyActionsModule : IAnimationModule
+    public sealed class FullBodyActionsModule : IModule
     {
         private readonly IFullBodyActionAnimator _animator;
         private readonly FullBodyActionInputEvents _inputEvents;
