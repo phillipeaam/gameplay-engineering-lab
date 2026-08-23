@@ -19,14 +19,18 @@ set before removing anything.
 It does not authorize:
 
 - discarding staged, unstaged, or untracked work;
-- deleting a WIP snapshot or its worktree;
 - deleting remote branches;
 - closing, merging, or modifying pull requests;
 - force-deleting a package branch that is not proven merged.
 
-Obtain separate explicit confirmation for WIP deletion and remote branch
-deletion. When the skill triggers implicitly or the user requests only an audit
-or proposal, remain read-only.
+When every package PR in the prepared set is confirmed `MERGED`, every package
+head is reachable from the fetched integration branch, and the WIP and
+verification artifacts are clean with no unique tree content, the explicit
+`$cleanup-pr-set` invocation also authorizes deleting those obsolete local WIP
+and verification refs without another prompt. Preserve them when any package
+remains unmerged, dirty, incomplete, or ambiguous. Remote branch deletion
+always requires separate explicit authorization. When the skill triggers
+implicitly or the user requests only an audit or proposal, remain read-only.
 
 ## 1. Inventory local and remote state
 
@@ -89,10 +93,14 @@ remove the worktree without force and delete the branch with `git branch -d`.
 Retain verification artifacts when the set is only partially merged, their
 provenance is ambiguous, or Git refuses safe deletion. Never publish them.
 
-## 5. Audit the WIP snapshot separately
+## 5. Audit and retire the WIP snapshots separately
 
-Never delete the source WIP snapshot during ordinary package or verification
-cleanup.
+Do not delete a WIP snapshot until the package and verification checks above
+prove that every prepared package is merged and the WIP tree is reconstructible
+from the integration branch. In that fully merged state, the explicit cleanup
+invocation permits removing the exact clean WIP refs without another prompt.
+If the set is partially merged or any WIP ref is dirty, retain it and report
+the reason.
 
 After those steps, report:
 
@@ -107,9 +115,9 @@ If any remaining package is uncommitted, treat the WIP as valuable recovery
 evidence and recommend retaining it. A dirty worktree is not equivalent to a
 committed backup.
 
-Ask one explicit question naming the exact WIP branch and worktree before any
-WIP removal. State whether deletion requires force because the snapshot is not
-merged and exactly which recovery capability will be lost.
+When WIP removal is authorized by the fully merged-state rule, report the exact
+refs and whether force deletion is required because they are recovery-only
+commits. Do not use force deletion for package branches.
 
 Only after explicit confirmation:
 
