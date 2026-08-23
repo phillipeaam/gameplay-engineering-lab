@@ -26,7 +26,7 @@ namespace Shared.RPG_Tiny_Hero_Duo.Scripts.Playground
             {
                 _logger.LogException(e);
             }
-            
+
             _locomotion.Compose();
         }
 
