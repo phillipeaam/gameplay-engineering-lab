@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Shared/RPG Tiny Hero Duo/Scene/RPGTinyHeroDuoPlayground.unity
+    path: Assets/Shared/ThirdParty/RPG Tiny Hero Duo/Scene/RPGTinyHeroDuoPlayground.unity
     guid: afc5b343aa68948bab4dd321302747cb
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
